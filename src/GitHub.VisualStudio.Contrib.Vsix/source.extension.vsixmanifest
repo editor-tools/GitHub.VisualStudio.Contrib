@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="GitHub.VisualStudio.Contrib.Vsix.Jamie Cansdale.ac14545a-6b28-42a9-ae09-d0850b7cc6c2" Version="1.0" Language="en-US" Publisher="Jamie Cansdale" />
+    <Identity Id="GitHub.VisualStudio.Contrib.ac14545a-6b28-42a9-ae09-d0850b7cc6c2" Version="1.0" Language="en-US" Publisher="Jamie Cansdale" />
     <DisplayName>GitHub.VisualStudio.Contrib.Vsix</DisplayName>
-    <Description>Empty VSIX Project.</Description>
+    <Description xml:space="preserve">This project extends GitHub for Visual Studio</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0]" />
   </Installation>
   <Dependencies>
     <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    <Dependency d:Source="Installed" Id="c3d3dc68-c977-411f-b3e8-03b0dccf7dfc" DisplayName="GitHub Extension for Visual Studio" Version="[2.2.0.8,3.0)" />
+    <Dependency Id="Microsoft.VisualStudio.MPF.15.0" DisplayName="Visual Studio MPF 15.0" d:Source="Installed" Version="[15.0]" />
   </Dependencies>
   <Prerequisites>
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
   </Prerequisites>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+  </Assets>
 </PackageManifest>

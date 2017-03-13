@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHub.VisualStudio.Contrib.Vsix", "GitHub.VisualStudio.Contrib.Vsix\GitHub.VisualStudio.Contrib.Vsix.csproj", "{AF96B283-9DDD-466C-9F03-E913CDC0A344}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHub.VisualStudio.Contrib.Vsix", "src\GitHub.VisualStudio.Contrib.Vsix\GitHub.VisualStudio.Contrib.Vsix.csproj", "{AF96B283-9DDD-466C-9F03-E913CDC0A344}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
