@@ -11,6 +11,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using GitHub.Services;
 using System.Diagnostics;
+using System.ComponentModel.Composition.Hosting;
 
 namespace GitHub.VisualStudio.Contrib.Vsix
 {
@@ -96,12 +97,8 @@ namespace GitHub.VisualStudio.Contrib.Vsix
         private void MenuItemCallback(object sender, EventArgs e)
         {
             var sp = (IGitHubServiceProvider)ServiceProvider.GetService(typeof(IGitHubServiceProvider));
-
-            var vsGitServices = sp.TryGetService<IVSGitServices>();
-            var repo = vsGitServices?.GetActiveRepoPath();
-
-            var statusBarNotificationService = sp.TryGetService<IStatusBarNotificationService>();
-            statusBarNotificationService?.ShowMessage(repo);
+            var container = new CompositionContainer(sp.ExportProvider);
+            container.GetExportedValue<GitHubCommandImpl>();
         }
     }
 }
