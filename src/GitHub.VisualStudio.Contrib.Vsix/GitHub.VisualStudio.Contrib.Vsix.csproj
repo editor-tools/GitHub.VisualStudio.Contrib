@@ -58,7 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -67,6 +69,10 @@
     <VSCTCompile Include="GitHubCommandPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
+    <Content Include="GhostAssemblies.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="index.html" />
     <Content Include="Resources\GitHubCommand.png" />
     <Content Include="Resources\GitHubCommandPackage.ico" />
@@ -85,17 +91,14 @@
     <Reference Include="EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="GitHub.Exports">
-      <HintPath>..\..\lib\GitHub.VisualStudio\GitHub.Exports.dll</HintPath>
-    </Reference>
-    <Reference Include="LibGit2Sharp, Version=0.22.0.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GitHub.VisualStudio\LibGit2Sharp.dll</HintPath>
+    <Reference Include="GhostAssemblies, Version=0.5.2.0, Culture=neutral, PublicKeyToken=8e1b219a7fd04e38, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\GhostAssemblies.0.5.2.0\lib\net40\GhostAssemblies.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.ComponentModelHost, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.VisualStudio.CoreUtility.15.0.26201\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
       <Private>True</Private>
@@ -182,7 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GitHub.VisualStudio.Contrib\GitHub.VisualStudio.Contrib.csproj">
-      <Project>{f0a5cd8a-5f10-4ad2-9817-8d054bbecae8}</Project>
+      <Project>{F0A5CD8A-5F10-4AD2-9817-8D054BBECAE8}</Project>
       <Name>GitHub.VisualStudio.Contrib</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>

@@ -9,9 +9,9 @@ using System.ComponentModel.Design;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using GitHub.Services;
 using System.Diagnostics;
 using System.ComponentModel.Composition.Hosting;
+using GhostAssemblies;
 
 namespace GitHub.VisualStudio.Contrib.Vsix
 {
@@ -20,6 +20,8 @@ namespace GitHub.VisualStudio.Contrib.Vsix
     /// </summary>
     internal sealed class GitHubCommand
     {
+        GhostAssemblyLoader ghostAssemblyLoader;
+
         /// <summary>
         /// Command ID.
         /// </summary>
@@ -42,12 +44,10 @@ namespace GitHub.VisualStudio.Contrib.Vsix
         /// <param name="package">Owner package, not null.</param>
         private GitHubCommand(Package package)
         {
-            if (package == null)
-            {
-                throw new ArgumentNullException("package");
-            }
+            var finderPath = Environment.GetEnvironmentVariable("GitHub_VisualStudio_Contrib_Path");
+            ghostAssemblyLoader = new GhostAssemblyLoader(finderPath, "Finder");
 
-            this.package = package;
+            this.package = package ?? throw new ArgumentNullException("package");
 
             OleMenuCommandService commandService = this.ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (commandService != null)
@@ -96,9 +96,9 @@ namespace GitHub.VisualStudio.Contrib.Vsix
         /// <param name="e">Event args.</param>
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            var sp = (IGitHubServiceProvider)ServiceProvider.GetService(typeof(IGitHubServiceProvider));
-            var container = new CompositionContainer(sp.ExportProvider);
-            container.GetExportedValue<GitHubCommandImpl>();
+            var assembly = ghostAssemblyLoader.ResolveAssembly("GitHub.VisualStudio.Contrib");
+            var type = assembly.GetType("GitHub.VisualStudio.Contrib.GitHubCommandImpl");
+            Activator.CreateInstance(type, ServiceProvider);
         }
     }
 }

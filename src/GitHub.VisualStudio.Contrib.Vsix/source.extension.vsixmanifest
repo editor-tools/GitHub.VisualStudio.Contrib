@@ -18,6 +18,7 @@
   </Prerequisites>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="GhostAssemblies.dll" AssemblyName="GhostAssemblies, Version=0.5.2.0, Culture=neutral, PublicKeyToken=8e1b219a7fd04e38" />
     <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="GitHub.VisualStudio.Contrib" Path="|GitHub.VisualStudio.Contrib|" AssemblyName="|GitHub.VisualStudio.Contrib;AssemblyName|" />
   </Assets>
 </PackageManifest>
