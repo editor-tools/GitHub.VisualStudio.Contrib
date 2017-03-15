@@ -7,13 +7,10 @@
     public class GitHubCommandExport
     {
         [ImportingConstructor]
-        public GitHubCommandExport(IGitHubServiceProvider sp)
+        public GitHubCommandExport(IStatusBarNotificationService notificationService, IVSGitServices vsGitServices)
         {
-            var vsGitServices = sp.GetService<IVSGitServices>();
             var repoPath = vsGitServices.GetActiveRepoPath();
-
-            var notificationService = sp.GetService<IStatusBarNotificationService>();
-            notificationService.ShowMessage("Hello, World! ActiveRepoPath=" + repoPath);
+            notificationService.ShowMessage("Hello, World! " + repoPath);
         }
     }
 }
