@@ -15,6 +15,8 @@ using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
+using GhostAssemblies;
+using System.Reflection;
 
 namespace GitHub.VisualStudio.Contrib.Vsix
 {
@@ -40,8 +42,9 @@ namespace GitHub.VisualStudio.Contrib.Vsix
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(GitHubCommandPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    public sealed class GitHubCommandPackage : Package
+    public sealed class GitHubCommandPackage : Package, IOleCommandTarget
     {
+
         /// <summary>
         /// GitHubCommandPackage GUID string.
         /// </summary>
@@ -58,7 +61,7 @@ namespace GitHub.VisualStudio.Contrib.Vsix
             // initialization is the Initialize method.
         }
 
-        #region Package Members
+        GhostObjectLifecycle ghostObjectLifecycle;
 
         /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
@@ -66,10 +69,25 @@ namespace GitHub.VisualStudio.Contrib.Vsix
         /// </summary>
         protected override void Initialize()
         {
-            GitHubCommand.Initialize(this);
+            var ghostPaths = Environment.GetEnvironmentVariable("GitHub_VisualStudio_Contrib_Path");
+            ghostObjectLifecycle = new GhostObjectLifecycle(ghostPaths,
+                "GitHub.VisualStudio.Contrib", "GitHub.VisualStudio.Contrib.PackageLifecycle", this);
+            ghostObjectLifecycle.GetInstance();
+
             base.Initialize();
         }
 
-        #endregion
+        int IOleCommandTarget.Exec(ref Guid guidGroup, uint nCmdId, uint nCmdExcept, IntPtr pIn, IntPtr vOut)
+        {
+            ghostObjectLifecycle.GetInstance();
+
+            IOleCommandTarget service = (IOleCommandTarget)GetService(typeof(IOleCommandTarget));
+            if (service != null)
+            {
+                return service.Exec(ref guidGroup, nCmdId, nCmdExcept, pIn, vOut);
+            }
+
+            return -2147221248;
+        }
     }
 }

@@ -10,7 +10,7 @@
         public GitHubCommandExport(IStatusBarNotificationService notificationService, IVSGitServices vsGitServices)
         {
             var repoPath = vsGitServices.GetActiveRepoPath();
-            notificationService.ShowMessage("Hello, World! " + repoPath);
+            notificationService.ShowMessage("Hello, World!! " + repoPath);
         }
     }
 }

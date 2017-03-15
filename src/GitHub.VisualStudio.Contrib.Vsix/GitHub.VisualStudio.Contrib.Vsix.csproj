@@ -52,7 +52,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GitHubCommand.cs" />
+    <Compile Include="GhostLifecycleManager.cs" />
     <Compile Include="GitHubCommandPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -68,6 +68,7 @@
   <ItemGroup>
     <VSCTCompile Include="GitHubCommandPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
     </VSCTCompile>
     <Content Include="GhostAssemblies.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
