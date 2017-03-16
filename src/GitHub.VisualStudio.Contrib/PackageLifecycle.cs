@@ -46,7 +46,7 @@
             var sp = (IGitHubServiceProvider)serviceProvider.GetService(typeof(IGitHubServiceProvider));
             container = new CompositionContainer(assemblyCatalog, sp.ExportProvider);
             container.ComposeExportedValue(package);
-            container.GetExportedValue<GitHubCommand>();
+            container.GetExportedValues<CommandBase>();
         }
 
         public void Dispose()
