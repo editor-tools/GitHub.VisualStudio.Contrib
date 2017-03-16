@@ -146,8 +146,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GitHubCommand.cs" />
-    <Compile Include="GitHubCommandImpl.cs" />
-    <Compile Include="GitHubCommandExport.cs" />
     <Compile Include="PackageLifecycle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
