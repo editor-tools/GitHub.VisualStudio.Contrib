@@ -59,6 +59,15 @@
           <ButtonText>Invoke GitHubCommand</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidGitHubCommandPackageCmdSet" id="GitHubConsoleCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidGitHubCommandPackageCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="bmpPic2" />
+        <CommandFlag>AllowParams</CommandFlag>
+        <Strings>
+          <ButtonText>GitHub Console</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -80,6 +89,7 @@
     <GuidSymbol name="guidGitHubCommandPackageCmdSet" value="{c194ca32-569e-4458-af37-b10f9a95b420}">
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="GitHubCommandId" value="0x0100" />
+      <IDSymbol name="GitHubConsoleCommandId" value="0x0101" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{60479cf2-828b-4e7c-9142-f7b26a9c2eda}" >

@@ -147,8 +147,10 @@
   <ItemGroup>
     <Compile Include="CommandBase.cs" />
     <Compile Include="CommandIDAttribute.cs" />
+    <Compile Include="GitHubConsoleCommand.cs" />
     <Compile Include="GitHubCommand.cs" />
     <Compile Include="PackageLifecycle.cs" />
+    <Compile Include="AllowParamsCommandBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

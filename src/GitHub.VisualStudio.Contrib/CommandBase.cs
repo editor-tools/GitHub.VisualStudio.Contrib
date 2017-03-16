@@ -8,22 +8,22 @@ namespace GitHub.VisualStudio.Contrib
     [InheritedExport]
     internal abstract class CommandBase : IDisposable
     {
-        MenuCommand menuCommand;
         OleMenuCommandService commandService;
 
         internal CommandBase(Package package)
         {
             var commandID = CommandIDAttribute.GetCommandID(GetType());
-            menuCommand = new MenuCommand(MenuItemCallback, commandID);
-
+            Command = new OleMenuCommand(MenuItemCallback, commandID);
             var serviceProvider = (IServiceProvider)package;
             commandService = (OleMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));
-            commandService.AddCommand(menuCommand);
+            commandService.AddCommand(Command);
         }
+
+        internal OleMenuCommand Command { get; }
 
         public void Dispose()
         {
-            commandService.RemoveCommand(menuCommand);
+            commandService.RemoveCommand(Command);
         }
 
         internal abstract void MenuItemCallback(object sender, EventArgs e);
