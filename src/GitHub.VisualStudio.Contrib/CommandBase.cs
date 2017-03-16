@@ -11,8 +11,9 @@ namespace GitHub.VisualStudio.Contrib
         MenuCommand menuCommand;
         OleMenuCommandService commandService;
 
-        internal CommandBase(Package package, CommandID commandID)
+        internal CommandBase(Package package)
         {
+            var commandID = CommandIDAttribute.GetCommandID(GetType());
             menuCommand = new MenuCommand(MenuItemCallback, commandID);
 
             var serviceProvider = (IServiceProvider)package;
