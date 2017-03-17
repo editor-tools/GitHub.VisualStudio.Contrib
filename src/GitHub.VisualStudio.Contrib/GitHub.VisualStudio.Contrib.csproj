@@ -147,7 +147,12 @@
   <ItemGroup>
     <Compile Include="CommandBase.cs" />
     <Compile Include="CommandIDAttribute.cs" />
-    <Compile Include="GitHubConsoleCommand.cs" />
+    <Compile Include="Console\SubcommandMetadataAttribute.cs" />
+    <Compile Include="Console\ConsoleContext.cs" />
+    <Compile Include="Console\ConsoleCommand.cs" />
+    <Compile Include="Console\ISubcommandMetadata.cs" />
+    <Compile Include="Console\IConsoleContext.cs" />
+    <Compile Include="Console\VSGitServicesSubcommands.cs" />
     <Compile Include="GitHubCommand.cs" />
     <Compile Include="PackageLifecycle.cs" />
     <Compile Include="AllowParamsCommandBase.cs" />
