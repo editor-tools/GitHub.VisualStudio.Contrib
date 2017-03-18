@@ -37,16 +37,6 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GitHub.Exports, Version=2.2.0.8, Culture=neutral, PublicKeyToken=bc1bd09f2901c82e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Exports.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="LibGit2Sharp, Version=0.22.0.0, Culture=neutral, PublicKeyToken=7cbde695407f0333, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\LibGit2Sharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
@@ -58,6 +48,21 @@
     </Reference>
     <Reference Include="EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="GitHub.Exports">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Exports.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GitHub.VisualStudio">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.VisualStudio.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="LibGit2Sharp">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\LibGit2Sharp.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.CommandBars, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -152,6 +157,8 @@
     <Compile Include="Console\ConsoleCommand.cs" />
     <Compile Include="Console\ISubcommandMetadata.cs" />
     <Compile Include="Console\IConsoleContext.cs" />
+    <Compile Include="Console\ToolWindowManagerUtilities.cs" />
+    <Compile Include="Console\WindowManagerSubcommands.cs" />
     <Compile Include="Console\VSGitServicesSubcommands.cs" />
     <Compile Include="GitHubCommand.cs" />
     <Compile Include="PackageLifecycle.cs" />
