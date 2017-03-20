@@ -47,6 +47,7 @@
             container = new CompositionContainer(assemblyCatalog, sp.ExportProvider);
             container.ComposeExportedValue(package);
             container.GetExportedValues<CommandBase>();
+            container.GetExportedValue<GitCloneCommandLine>();
         }
 
         public void Dispose()
