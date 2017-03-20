@@ -147,6 +147,7 @@
   <ItemGroup>
     <Compile Include="CommandBase.cs" />
     <Compile Include="CommandIDAttribute.cs" />
+    <Compile Include="GitCloneCommandLine.cs" />
     <Compile Include="Console\SubcommandMetadataAttribute.cs" />
     <Compile Include="Console\ConsoleContext.cs" />
     <Compile Include="Console\ConsoleCommand.cs" />
