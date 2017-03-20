@@ -1,19 +1,21 @@
-﻿using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Shell;
+﻿using System.Reflection;
+using System.Windows.Controls;
+using System.ComponentModel.Composition;
 using GitHub.UI;
 using GitHub.Services;
+using GitHub.ViewModels;
 
 namespace GitHub.VisualStudio.Contrib.Console
 {
     public partial class WindowManagerSubcommands
     {
-        IConsoleContext consoleContext;
+        IConsoleContext console;
         IGitHubServiceProvider gitHubServiceProvider;
 
         [ImportingConstructor]
-        public WindowManagerSubcommands(IConsoleContext consoleContext, IGitHubServiceProvider gitHubServiceProvider)
+        public WindowManagerSubcommands(IConsoleContext console, IGitHubServiceProvider gitHubServiceProvider)
         {
-            this.consoleContext = consoleContext;
+            this.console = console;
             this.gitHubServiceProvider = gitHubServiceProvider;
         }
 
@@ -25,12 +27,20 @@ namespace GitHub.VisualStudio.Contrib.Console
             homePane.ShowView(viewWithData);
         }
 
-        [Export, SubcommandMetadata("Publish")]
-        public void Publish()
+        [Export, SubcommandMetadata("HelloWorldView")]
+        public void HelloWorldView()
         {
             var homePane = ToolWindowManagerUtilities.ShowHomePane(gitHubServiceProvider);
-            var viewWithData = new ViewWithData(UIControllerFlow.Publish);
-            homePane.ShowView(viewWithData);
+            var container = GetContainer(homePane);
+            container.Content = new TextBlock { Text = "Hello, World!" };
+        }
+
+        static UserControl GetContainer(IViewHost viewHost)
+        {
+            var viewProp = viewHost.GetType().GetProperty("View", BindingFlags.NonPublic | BindingFlags.Instance);
+            var view = (UserControl)viewProp.GetValue(viewHost);
+            var container = (UserControl)view.FindName("container");
+            return container;
         }
     }
 }
