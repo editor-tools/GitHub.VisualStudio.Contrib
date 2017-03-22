@@ -54,9 +54,29 @@
       <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Exports.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="GitHub.Exports.Reactive">
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Exports.Reactive.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GitHub.Extensions">
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GitHub.Extensions.Reactive">
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Extensions.Reactive.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GitHub.UI.Reactive">
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.UI.Reactive.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="GitHub.VisualStudio">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.VisualStudio.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GitHub.VisualStudio.UI">
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.VisualStudio.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="LibGit2Sharp">
@@ -137,6 +157,10 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="ReactiveUI">
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\ReactiveUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
@@ -144,6 +168,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -155,14 +180,15 @@
   <ItemGroup>
     <Compile Include="CommandBase.cs" />
     <Compile Include="CommandIDAttribute.cs" />
+    <Compile Include="AssemblyResolver.cs" />
+    <Compile Include="Console\AssemblyResolverSubcommands.cs" />
     <Compile Include="Console\SubcommandMetadataAttribute.cs" />
     <Compile Include="Console\ConsoleContext.cs" />
     <Compile Include="Console\ConsoleCommand.cs" />
     <Compile Include="Console\ISubcommandMetadata.cs" />
     <Compile Include="Console\IConsoleContext.cs" />
-    <Compile Include="Console\ToolWindowManagerUtilities.cs" />
-    <Compile Include="Console\WindowManagerSubcommands.cs" />
     <Compile Include="Console\VSGitServicesSubcommands.cs" />
+    <Compile Include="Console\WindowManagerSubcommands.cs" />
     <Compile Include="GitHubCommand.cs" />
     <Compile Include="PackageLifecycle.cs" />
     <Compile Include="AllowParamsCommandBase.cs" />
