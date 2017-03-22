@@ -33,5 +33,11 @@ namespace GitHub.VisualStudio.Contrib.Console
                 consoleContext.WriteLine($"{repo.CloneUrl} ({repo.LocalPath})");
             }
         }
+
+        [Export, SubcommandMetadata("GetLocalClonePathFromGitProvider")]
+        public void GetLocalClonePathFromGitProvider()
+        {
+            consoleContext.WriteLine(vsGitServices.GetLocalClonePathFromGitProvider());
+        }
     }
 }

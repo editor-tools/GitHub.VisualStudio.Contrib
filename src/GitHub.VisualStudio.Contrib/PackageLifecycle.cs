@@ -60,6 +60,7 @@ namespace GitHub.VisualStudio.Contrib
             container.ComposeExportedValue(assemblyResolver);
             container.ComposeExportedValue(package);
             container.GetExportedValues<CommandBase>();
+            container.GetExportedValue<GitCloneCommandLine>();
         }
 
         public void Dispose()
