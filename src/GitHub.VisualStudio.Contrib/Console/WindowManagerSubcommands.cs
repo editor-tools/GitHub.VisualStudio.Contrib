@@ -11,18 +11,20 @@ namespace GitHub.VisualStudio.Contrib.Console
     {
         IConsoleContext console;
         IGitHubServiceProvider gitHubServiceProvider;
+        IGitHubToolWindowManager gitHubToolWindowManager;
 
         [ImportingConstructor]
         public WindowManagerSubcommands(IConsoleContext console, IGitHubServiceProvider gitHubServiceProvider)
         {
             this.console = console;
             this.gitHubServiceProvider = gitHubServiceProvider;
+            gitHubToolWindowManager = gitHubServiceProvider.GetService<IGitHubToolWindowManager>();
         }
 
         [Export, SubcommandMetadata("Clone")]
         public void Clone()
         {
-            var homePane = ToolWindowManagerUtilities.ShowHomePane(gitHubServiceProvider);
+            var homePane = gitHubToolWindowManager.ShowHomePane();
             var viewWithData = new ViewWithData(UIControllerFlow.Clone);
             homePane.ShowView(viewWithData);
         }
@@ -30,7 +32,7 @@ namespace GitHub.VisualStudio.Contrib.Console
         [Export, SubcommandMetadata("HelloWorldView")]
         public void HelloWorldView()
         {
-            var homePane = ToolWindowManagerUtilities.ShowHomePane(gitHubServiceProvider);
+            var homePane = gitHubToolWindowManager.ShowHomePane();
             var container = GetContainer(homePane);
             container.Content = new TextBlock { Text = "Hello, World!" };
         }
@@ -39,8 +41,7 @@ namespace GitHub.VisualStudio.Contrib.Console
         {
             var viewProp = viewHost.GetType().GetProperty("View", BindingFlags.NonPublic | BindingFlags.Instance);
             var view = (UserControl)viewProp.GetValue(viewHost);
-            var container = (UserControl)view.FindName("container");
-            return container;
+            return (UserControl)view.FindName("container");
         }
     }
 }
