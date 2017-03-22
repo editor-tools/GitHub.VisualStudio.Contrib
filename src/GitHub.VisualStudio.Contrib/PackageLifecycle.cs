@@ -1,19 +1,20 @@
-﻿namespace GitHub.VisualStudio.Contrib
-{
-    using System;
-    using Microsoft.VisualStudio.Shell;
-    using EnvDTE80;
-    using System.IO;
-    using System.Reflection;
-    using System.Diagnostics;
-    using System.ComponentModel.Composition;
-    using System.ComponentModel.Composition.Hosting;
-    using GitHub.Services;
-    using EnvDTE;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Diagnostics;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
+using GitHub.Services;
 
+namespace GitHub.VisualStudio.Contrib
+{
     public class PackageLifecycle : IDisposable
     {
         Package package;
+        AssemblyResolver assemblyResolver;
         CompositionContainer container;
 
         public PackageLifecycle(Package package)
@@ -30,6 +31,16 @@
                 var message = $"Please install GitHub for Visual Studio version {assemblyName.Version} or later";
                 dte.StatusBar.Text = message;
             }
+            catch (ReflectionTypeLoadException e)
+            {
+                Trace.WriteLine(e);
+                foreach (var ex in e.LoaderExceptions)
+                {
+                    Trace.WriteLine(ex);
+                }
+
+                dte.StatusBar.Text = e.ToString();
+            }
             catch (Exception e)
             {
                 Trace.WriteLine(e);
@@ -41,10 +52,12 @@
 
         void Init(IServiceProvider serviceProvider)
         {
+            assemblyResolver = new AssemblyResolver(typeof(IGitHubServiceProvider), "GitHub.VisualStudio.dll");
             var assembly = Assembly.GetExecutingAssembly();
             var assemblyCatalog = new AssemblyCatalog(assembly);
             var sp = (IGitHubServiceProvider)serviceProvider.GetService(typeof(IGitHubServiceProvider));
             container = new CompositionContainer(assemblyCatalog, sp.ExportProvider);
+            container.ComposeExportedValue(assemblyResolver);
             container.ComposeExportedValue(package);
             container.GetExportedValues<CommandBase>();
             container.GetExportedValue<GitCloneCommandLine>();
@@ -52,7 +65,8 @@
 
         public void Dispose()
         {
-            container.Dispose();
+            container?.Dispose();
+            assemblyResolver?.Dispose();
         }
     }
 }
