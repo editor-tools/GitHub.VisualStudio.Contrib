@@ -34,18 +34,25 @@ namespace GitHub.VisualStudio.Contrib
 
         Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            // NOTE: This is currently resolving too much!
-            var name = new AssemblyName(args.Name).Name;
+            var assemblyName = new AssemblyName(args.Name);
+            var name = assemblyName.Name;
             var file = Path.Combine(BaseDirectory, name + ".dll");
-            if (File.Exists(file))
+            if(!File.Exists(file))
             {
-                Trace.WriteLine($"Resolving '{args.Name}' to '{file}'.");
-                var assembly = Assembly.LoadFrom(file);
-                ResolvedAssemblies[args] = assembly;
-                return assembly;
+                return null;
             }
 
-            return null;
+            if(!name.StartsWith("GitHub."))
+            {
+                Trace.WriteLine($"Not resolving '{args.Name}' because it doesn't start with 'GitHub.'.");
+                return null;
+            }
+
+            var assembly = Assembly.LoadFrom(file);
+            ResolvedAssemblies[args] = assembly;
+
+            Trace.WriteLine($"Resolving '{args.Name}' to '{assembly.FullName}' at '{file}'.");
+            return assembly;
         }
     }
 }
