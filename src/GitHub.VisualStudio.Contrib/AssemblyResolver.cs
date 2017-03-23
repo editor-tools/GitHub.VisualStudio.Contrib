@@ -10,18 +10,15 @@ namespace GitHub.VisualStudio.Contrib
     [Export]
     class AssemblyResolver : IDisposable
     {
-        internal AssemblyResolver(Type type, params string[] preloadFileNames)
+        internal AssemblyResolver(Type type) : this(Path.GetDirectoryName(type.Assembly.Location))
         {
-            BaseDirectory = Path.GetDirectoryName(type.Assembly.Location);
+        }
+
+        internal AssemblyResolver(string baseDirectory)
+        {
+            BaseDirectory = baseDirectory;
             ResolvedAssemblies = new Dictionary<ResolveEventArgs, Assembly>();
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-
-            foreach(var fileName in preloadFileNames)
-            {
-                var file = Path.Combine(BaseDirectory, fileName);
-                var assembly = Assembly.LoadFrom(file);
-                Trace.WriteLine($"Loaded '{assembly}' from '{file}'.");
-            }
         }
 
         public void Dispose()
@@ -34,25 +31,39 @@ namespace GitHub.VisualStudio.Contrib
 
         Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
         {
-            var assemblyName = new AssemblyName(args.Name);
-            var name = assemblyName.Name;
-            var file = Path.Combine(BaseDirectory, name + ".dll");
-            if(!File.Exists(file))
+            try
             {
+                var assemblyName = new AssemblyName(args.Name);
+                var name = assemblyName.Name;
+                var file = Path.Combine(BaseDirectory, name + ".dll");
+                if (!File.Exists(file))
+                {
+                    return null;
+                }
+
+                var targetAssemblyName = AssemblyName.GetAssemblyName(file);
+                if (args.Name != targetAssemblyName.FullName)
+                {
+                    if (!name.StartsWith("GitHub."))
+                    {
+                        Trace.WriteLine($"Not redirecting '{args.Name}' to '{targetAssemblyName.FullName}' (doesn't start with 'GitHub.*').");
+                        return null;
+                    }
+
+                    Trace.WriteLine($"Redirecting '{args.Name}' to '{targetAssemblyName.FullName}'.");
+                }
+
+                var assembly = Assembly.LoadFrom(file);
+                Trace.WriteLine($"Resolving '{assembly.FullName}' at '{file}'.");
+
+                ResolvedAssemblies[args] = assembly;
+                return assembly;
+            }
+            catch(Exception e)
+            {
+                Trace.WriteLine($"Error resolving '{args.Name}': {e}");
                 return null;
             }
-
-            if(!name.StartsWith("GitHub."))
-            {
-                Trace.WriteLine($"Not resolving '{args.Name}' because it doesn't start with 'GitHub.'.");
-                return null;
-            }
-
-            var assembly = Assembly.LoadFrom(file);
-            ResolvedAssemblies[args] = assembly;
-
-            Trace.WriteLine($"Resolving '{args.Name}' to '{assembly.FullName}' at '{file}'.");
-            return assembly;
         }
     }
 }
