@@ -1,18 +1,20 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 using System.Diagnostics;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.VisualStudio.Shell;
 using GitHub.Services;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace GitHub.VisualStudio.Contrib
 {
     public class PackageLifecycle : IDisposable
     {
+        const string GitHubPackagePkgString = "c3d3dc68-c977-411f-b3e8-03b0dccf7dfc";
+
         Package package;
         AssemblyResolver assemblyResolver;
         CompositionContainer container;
@@ -23,13 +25,16 @@ namespace GitHub.VisualStudio.Contrib
             var dte = (DTE2)ServiceProvider.GetService(typeof(DTE));
             try
             {
-                Init(ServiceProvider);
-            }
-            catch (FileNotFoundException e) when (e.FileName.StartsWith("GitHub.Exports,"))
-            {
-                var assemblyName = new AssemblyName(e.FileName);
-                var message = $"Please install GitHub for Visual Studio version {assemblyName.Version} or later";
-                dte.StatusBar.Text = message;
+                var gitHubPackage = FindPackage(GitHubPackagePkgString);
+                if(gitHubPackage == null)
+                {
+                    var message = $"Please install GitHub for Visual Studio";
+                    dte.StatusBar.Text = message;
+                    return;
+                }
+
+                assemblyResolver = new AssemblyResolver(gitHubPackage.GetType());
+                Init();
             }
             catch (ReflectionTypeLoadException e)
             {
@@ -48,14 +53,19 @@ namespace GitHub.VisualStudio.Contrib
             }
         }
 
-        IServiceProvider ServiceProvider => package;
-
-        void Init(IServiceProvider serviceProvider)
+        IVsPackage FindPackage(string pkgString)
         {
-            assemblyResolver = new AssemblyResolver(typeof(IGitHubServiceProvider), "GitHub.VisualStudio.dll");
+            var guid = new Guid(pkgString);
+            IVsPackage package = null;
+            Shell?.LoadPackage(ref guid, out package);
+            return package;
+        }
+
+        void Init()
+        {
             var assembly = Assembly.GetExecutingAssembly();
             var assemblyCatalog = new AssemblyCatalog(assembly);
-            var sp = (IGitHubServiceProvider)serviceProvider.GetService(typeof(IGitHubServiceProvider));
+            var sp = (IGitHubServiceProvider)ServiceProvider.GetService(typeof(IGitHubServiceProvider));
             container = new CompositionContainer(assemblyCatalog, sp.ExportProvider);
             container.ComposeExportedValue(assemblyResolver);
             container.ComposeExportedValue(package);
@@ -68,5 +78,8 @@ namespace GitHub.VisualStudio.Contrib
             container?.Dispose();
             assemblyResolver?.Dispose();
         }
+
+        IVsShell Shell => ServiceProvider.GetService(typeof(SVsShell)) as IVsShell;
+        IServiceProvider ServiceProvider => package;
     }
 }
