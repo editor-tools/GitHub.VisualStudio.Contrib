@@ -13,6 +13,7 @@ namespace GitHub.VisualStudio.Contrib
 {
     public class PackageLifecycle : IDisposable
     {
+        public const string InstallMessage = "Please install the GitHub Extension for Visual Studio";
         const string GitHubPackagePkgString = "c3d3dc68-c977-411f-b3e8-03b0dccf7dfc";
 
         Package package;
@@ -28,7 +29,7 @@ namespace GitHub.VisualStudio.Contrib
                 var gitHubPackage = FindPackage(GitHubPackagePkgString);
                 if(gitHubPackage == null)
                 {
-                    var message = $"Please install GitHub for Visual Studio";
+                    var message = InstallMessage;
                     dte.StatusBar.Text = message;
                     return;
                 }
