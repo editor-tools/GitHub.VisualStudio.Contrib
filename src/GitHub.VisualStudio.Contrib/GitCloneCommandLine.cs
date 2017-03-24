@@ -2,27 +2,29 @@
 using System.IO;
 using System.Diagnostics;
 using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using GitHub.Services;
 using GitHub.Primitives;
+using Rothko;
 
 namespace GitHub.VisualStudio.Contrib
 {
     [Export]
     public class GitCloneCommandLine
     {
-        Package package;
+        IVsAppCommandLine vsAppCommandLine;
         IVSGitServices vsGitServices;
         IVSServices vsServices;
+        IOperatingSystem operatingSystem;
 
         [ImportingConstructor]
-        internal GitCloneCommandLine(Package package, IVSGitServices vsGitServices,
-            ITeamExplorerServices teamExplorerServices, IVSServices vsServices)
+        public GitCloneCommandLine(IVsAppCommandLine vsAppCommandLine, IVSGitServices vsGitServices,
+            ITeamExplorerServices teamExplorerServices, IVSServices vsServices, IOperatingSystem operatingSystem)
         {
-            this.package = package;
+            this.vsAppCommandLine = vsAppCommandLine;
             this.vsGitServices = vsGitServices;
             this.vsServices = vsServices;
+            this.operatingSystem = operatingSystem;
 
             var cloneUrl = FindCloneUrl();
             if(cloneUrl == null)
@@ -45,12 +47,9 @@ namespace GitHub.VisualStudio.Contrib
             {
                 if (cloneUrl == repo.CloneUrl)
                 {
-                    if (Directory.Exists(repo.LocalPath))
+                    if(vsServices.TryOpenRepository(repo.LocalPath))
                     {
-                        if(vsServices.TryOpenRepository(repo.LocalPath))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
             }
@@ -67,8 +66,14 @@ namespace GitHub.VisualStudio.Contrib
             }
 
             var clonePath = vsGitServices.GetLocalClonePathFromGitProvider();
+            if(clonePath == null)
+            {
+                return false;
+            }
+
             var repoPath = Path.Combine(clonePath, cloneUri.Owner, cloneUri.RepositoryName);
-            if (!Directory.Exists(repoPath))
+            var repoDir = operatingSystem.Directory.GetDirectory(repoPath);
+            if (!repoDir.Exists)
             {
                 return false;
             }
@@ -102,8 +107,7 @@ namespace GitHub.VisualStudio.Contrib
 
         string FindCloneUrl()
         {
-            var cmdline = (IVsAppCommandLine)ServiceProvider.GetService(typeof(SVsAppCommandLine));
-            cmdline.GetOption("GitClone", out int isPresent, out string optionValue);
+            vsAppCommandLine.GetOption("GitClone", out int isPresent, out string optionValue);
             if (isPresent == 0)
             {
                 return null;
@@ -111,7 +115,20 @@ namespace GitHub.VisualStudio.Contrib
 
             return optionValue;
         }
-
-        IServiceProvider ServiceProvider => package;
     }
+
+    class VsAppCommandLineFactory
+    {
+        IVsAppCommandLine vsAppCommandLine;
+
+        [ImportingConstructor]
+        internal VsAppCommandLineFactory(IGitHubServiceProvider sp)
+        {
+            vsAppCommandLine = sp.GetService<IVsAppCommandLine>();
+        }
+
+        [Export]
+        internal IVsAppCommandLine VsAppCommandLine => vsAppCommandLine;
+    }
+
 }
