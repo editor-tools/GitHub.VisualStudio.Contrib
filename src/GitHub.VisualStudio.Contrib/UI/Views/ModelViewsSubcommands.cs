@@ -12,16 +12,13 @@ namespace GitHub.VisualStudio.Contrib.Console
     public partial class ModelViewsSubcommands
     {
         IGitHubServiceProvider gitHubServiceProvider;
-        HelloWorldView helloWorldView;
-        HelloWorldViewModel helloWorldViewModel;
+        IConsoleContext console;
 
         [ImportingConstructor]
-        public ModelViewsSubcommands(IGitHubServiceProvider gitHubServiceProvider,
-            HelloWorldView helloWorldView, HelloWorldViewModel helloWorldViewModel)
+        public ModelViewsSubcommands(IGitHubServiceProvider gitHubServiceProvider, IConsoleContext console)
         {
             this.gitHubServiceProvider = gitHubServiceProvider;
-            this.helloWorldView = helloWorldView;
-            this.helloWorldViewModel = helloWorldViewModel;
+            this.console = console;
         }
 
         [Export, SubcommandMetadata("HelloWorldModelView")]
@@ -30,6 +27,8 @@ namespace GitHub.VisualStudio.Contrib.Console
             var gitHubToolWindowManager = gitHubServiceProvider.GetService<IGitHubToolWindowManager>();
             var homePane = gitHubToolWindowManager.ShowHomePane();
             var container = GetContainer(homePane);
+            var helloWorldView = new HelloWorldView();
+            var helloWorldViewModel = new HelloWorldViewModel(console);
             helloWorldView.DataContext = helloWorldViewModel;
             container.Content = helloWorldView;
         }

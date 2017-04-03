@@ -8,6 +8,7 @@ using EnvDTE80;
 using GitHub.Services;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.Linq;
 
 namespace GitHub.VisualStudio.Contrib
 {
@@ -18,11 +19,12 @@ namespace GitHub.VisualStudio.Contrib
         Package package;
         AssemblyResolver assemblyResolver;
         CompositionContainer container;
+        DTE2 dte;
 
         public PackageLifecycle(Package package)
         {
             this.package = package;
-            var dte = (DTE2)ServiceProvider.GetService(typeof(DTE));
+            dte = (DTE2)ServiceProvider.GetService(typeof(DTE));
             try
             {
                 var gitHubPackage = FindPackage(GitHubPackagePkgString);
@@ -44,12 +46,12 @@ namespace GitHub.VisualStudio.Contrib
                     Trace.WriteLine(ex);
                 }
 
-                dte.StatusBar.Text = e.ToString();
+                dte.StatusBar.Text = e.Message;
             }
             catch (Exception e)
             {
                 Trace.WriteLine(e);
-                dte.StatusBar.Text = e.ToString();
+                dte.StatusBar.Text = e.Message;
             }
         }
 
@@ -64,13 +66,36 @@ namespace GitHub.VisualStudio.Contrib
         void Init()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var assemblyCatalog = new AssemblyCatalog(assembly);
+            var catalog = GetCatalog(assembly);
             var sp = (IGitHubServiceProvider)ServiceProvider.GetService(typeof(IGitHubServiceProvider));
-            container = new CompositionContainer(assemblyCatalog, sp.ExportProvider);
+            container = new CompositionContainer(catalog, sp.ExportProvider);
             container.ComposeExportedValue(assemblyResolver);
             container.ComposeExportedValue(package);
             container.GetExportedValues<CommandBase>();
             container.GetExportedValue<GitCloneCommandLine>();
+        }
+
+        private TypeCatalog GetCatalog(Assembly assembly)
+        {
+            Type[] types;
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                Trace.WriteLine(e);
+                foreach (var ex in e.LoaderExceptions)
+                {
+                    Trace.WriteLine(ex);
+                    dte.StatusBar.Text = ex.Message;
+                }
+
+                types = e.Types.Where(t => t != null).ToArray();
+            }
+
+            var catalog = new TypeCatalog(types);
+            return catalog;
         }
 
         public void Dispose()
