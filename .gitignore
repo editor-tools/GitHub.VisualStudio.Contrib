@@ -262,3 +262,5 @@ __pycache__/
 
 /*.vsix
 /Scratch
+*.ncrunchsolution
+*.ncrunchproject
