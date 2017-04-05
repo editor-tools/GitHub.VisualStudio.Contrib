@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Diagnostics;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using EnvDTE;
 using EnvDTE80;
-using GitHub.Services;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using System.Linq;
+using Microsoft.VisualStudio.ComponentModelHost;
 
 namespace GitHub.VisualStudio.Contrib
 {
@@ -68,8 +68,8 @@ namespace GitHub.VisualStudio.Contrib
         {
             var assembly = Assembly.GetExecutingAssembly();
             var catalog = GetCatalog(assembly);
-            var sp = (IGitHubServiceProvider)ServiceProvider.GetService(typeof(IGitHubServiceProvider));
-            container = new CompositionContainer(catalog, sp.ExportProvider);
+            var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
+            container = new CompositionContainer(catalog, componentModel.DefaultExportProvider);
             container.ComposeExportedValue(assemblyResolver);
             container.ComposeExportedValue(package);
             container.GetExportedValues<CommandBase>();
