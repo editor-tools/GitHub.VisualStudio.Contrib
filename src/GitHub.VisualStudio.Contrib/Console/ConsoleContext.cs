@@ -12,15 +12,14 @@ namespace GitHub.VisualStudio.Contrib.Console
         CommandWindow commandWindow;
 
         [ImportingConstructor]
-        internal ConsoleContext(Package package)
+        internal ConsoleContext(SVsServiceProvider serviceProvider)
         {
-            commandWindow = GetCommandWindow(package);
+            commandWindow = GetCommandWindow(serviceProvider);
         }
 
-        static CommandWindow GetCommandWindow(Package package)
+        static CommandWindow GetCommandWindow(IServiceProvider serviceProvider)
         {
-            var sp = (IServiceProvider)package;
-            var dte2 = (DTE2)sp.GetService(typeof(DTE));
+            var dte2 = (DTE2)serviceProvider.GetService(typeof(DTE));
             return dte2.ToolWindows.CommandWindow;
         }
 
