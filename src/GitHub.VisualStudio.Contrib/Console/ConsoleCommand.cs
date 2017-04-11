@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GitHub.VisualStudio.Contrib.Console
 {
@@ -10,13 +11,16 @@ namespace GitHub.VisualStudio.Contrib.Console
     {
         IConsoleContext consoleContext;
         IEnumerable<Lazy<Action, ISubcommandMetadata>> commands;
+        IEnumerable<Lazy<Action<string[]>, ISubcommandMetadata>> commandsWithArgs;
 
         [ImportingConstructor]
         internal ConsoleCommand(Package package, IConsoleContext consoleContext,
-            [ImportMany] IEnumerable<Lazy<Action, ISubcommandMetadata>> commands) : base(package)
+            [ImportMany] IEnumerable<Lazy<Action, ISubcommandMetadata>> commands,
+            [ImportMany] IEnumerable<Lazy<Action<string[]>, ISubcommandMetadata>> commandsWithArgs) : base(package)
         {
             this.consoleContext = consoleContext;
             this.commands = commands;
+            this.commandsWithArgs = commandsWithArgs;
         }
 
         internal override void MenuItemCallback(object sender, OleMenuCmdEventArgs e)
@@ -32,21 +36,31 @@ namespace GitHub.VisualStudio.Contrib.Console
 
                 consoleContext.WriteLine("Available subcommands");
                 consoleContext.WriteLine("");
-                foreach (var command in commands)
+                var subcommands = commands.Select(c => c.Metadata).Concat(commandsWithArgs.Select(c => c.Metadata));
+                foreach (var subcommand in subcommands)
                 {
-                    consoleContext.WriteLine(command.Metadata.Name);
+                    consoleContext.WriteLine(subcommand.Name);
                 }
 
                 return;
             }
 
-            foreach (var command in commands)
+            var split = CmdLineToArgvW.SplitArgs(input);
+            var commandName = split.First();
+            var commandArgs = split.Skip(1).ToArray();
+
+            var command = commands.Where(c => c.Metadata.Name == commandName).Select(c => c.Value).FirstOrDefault();
+            if (command != null)
             {
-                if (command.Metadata.Name == input)
-                {
-                    command.Value();
-                    return;
-                }
+                command();
+                return;
+            }
+
+            var commandWithArgs = commandsWithArgs.Where(c => c.Metadata.Name == commandName).Select(c => c.Value).FirstOrDefault();
+            if (commandWithArgs != null)
+            {
+                commandWithArgs(commandArgs);
+                return;
             }
 
             consoleContext.WriteLine($"Unknown command '{input}'.");
