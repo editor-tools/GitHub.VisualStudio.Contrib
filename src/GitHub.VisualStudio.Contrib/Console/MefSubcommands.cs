@@ -57,12 +57,19 @@ namespace GitHub.VisualStudio.Contrib.Console
             var search = args[0];
 
             var runtimeComposition = await LoadDefaultRuntimeCompositionAsync();
+            var assemblyLocations = new HashSet<string>();
             foreach (var part in runtimeComposition.Parts)
             {
                 if (FindSatisfyingExports(part, search))
                 {
                     FindSatisfyingExports(part, search, true);
+                    assemblyLocations.Add(part.TypeRef.Resolve().Assembly.Location);
                 }
+            }
+
+            foreach(var assemblyLocation in assemblyLocations)
+            {
+                consoleContext.WriteLine(assemblyLocation);
             }
         }
 
@@ -87,19 +94,19 @@ namespace GitHub.VisualStudio.Contrib.Console
             if (output)
             {
                 var partType = runtimePart.TypeRef.Resolve();
-                consoleContext.WriteLine(partType.FullName);
+                consoleContext.WriteLine($"{partType.FullName}");
             }
 
             foreach (var importingMember in runtimePart.ImportingMembers)
             {
                 foreach (var export in importingMember.SatisfyingExports)
                 {
-                    if (export.ExportedValueTypeRef.AssemblyName.Name.Contains(search))
+                    if (export.DeclaringTypeRef.AssemblyName.Name.Contains(search))
                     {
                         found = true;
                         if (output)
                         {
-                            consoleContext.WriteLine($"   .{importingMember.ImportingMember.Name} = {export.DeclaringTypeRef.Resolve()}");
+                            consoleContext.WriteLine($"   .{importingMember.ImportingMember.Name} = {ToMemberPath(export)}");
                         }
                         else
                         {
@@ -113,12 +120,12 @@ namespace GitHub.VisualStudio.Contrib.Console
             {
                 foreach (var export in importingConstructorArgument.SatisfyingExports)
                 {
-                    if (export.ExportedValueTypeRef.AssemblyName.Name.Contains(search))
+                    if (export.DeclaringTypeRef.AssemblyName.Name.Contains(search))
                     {
                         found = true;
                         if (output)
                         {
-                            consoleContext.WriteLine($"   .({importingConstructorArgument.ImportingParameter.Name} = {export.DeclaringTypeRef.Resolve()})");
+                            consoleContext.WriteLine($"   ({importingConstructorArgument.ImportingParameter.Name} = {ToMemberPath(export)})");
                         }
                         else
                         {
@@ -129,6 +136,19 @@ namespace GitHub.VisualStudio.Contrib.Console
             }
 
             return found;
+        }
+
+        static string ToMemberPath(RuntimeComposition.RuntimeExport export)
+        {
+            var declaringType = export.DeclaringTypeRef.Resolve();
+            var memberInfo = export.MemberRef.Resolve();
+            var path = declaringType.FullName;
+            if (memberInfo != null)
+            {
+                path += "." + memberInfo.Name;
+            }
+
+            return path;
         }
 
         [Export, SubcommandMetadata("mef-assemblies")]
