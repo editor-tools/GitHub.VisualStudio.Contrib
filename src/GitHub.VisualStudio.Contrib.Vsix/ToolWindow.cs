@@ -31,7 +31,7 @@ namespace GitHub.VisualStudio.Contrib.Vsix
         public ToolWindow() : base(null)
         {
             Caption = "Tool Window";
-            Content = new Grid();
+            Content = new ContentControl();
         }
     }
 }

@@ -41,10 +41,9 @@
                 var windowFrame = (IVsWindowFrame)toolWindowPane.Frame;
                 Microsoft.VisualStudio.ErrorHandler.ThrowOnFailure(windowFrame.Show());
 
-                var grid = (Grid)toolWindowPane.Content;
-                grid.Children.Clear();
-                grid.Children.Add(toolWindowView);
-                toolWindowPane.Caption = "ToolWindow";
+                var contentControl = (ContentControl)toolWindowPane.Content;
+                contentControl.Content = toolWindowView;
+                toolWindowPane.Caption = "Tool Window";
             }
             catch (Exception ex)
             {
