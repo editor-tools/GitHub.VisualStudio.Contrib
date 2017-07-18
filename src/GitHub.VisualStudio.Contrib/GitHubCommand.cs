@@ -2,10 +2,11 @@
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Shell;
 using GitHub.Services;
+using GitHub.VisualStudio.Contrib.Vsix;
 
 namespace GitHub.VisualStudio.Contrib
 {
-    [CommandID("c194ca32-569e-4458-af37-b10f9a95b420", 0x0100)]
+    [CommandID(PackageGuids.guidGitHubCommandPackageCmdSetString, PackageIds.GitHubCommandId)]
     internal sealed class GitHubCommand : CommandBase
     {
         IStatusBarNotificationService notificationService;

@@ -3,10 +3,11 @@ using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Shell;
 using System.Collections.Generic;
 using System.Linq;
+using GitHub.VisualStudio.Contrib.Vsix;
 
 namespace GitHub.VisualStudio.Contrib.Console
 {
-    [CommandID("c194ca32-569e-4458-af37-b10f9a95b420", 0x0101)]
+    [CommandID(PackageGuids.guidGitHubCommandPackageCmdSetString, PackageIds.GitHubConsoleCommandId)]
     internal sealed class ConsoleCommand : AllowParamsCommandBase
     {
         IConsoleContext consoleContext;
