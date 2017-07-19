@@ -40,16 +40,11 @@ namespace GitHub.VisualStudio.Contrib.Vsix
     [PackageRegistration(UseManagedResourcesOnly = true)]
     [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(GitHubCommandPackage.PackageGuidString)]
+    [Guid(PackageGuids.guidGitHubCommandPackageString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
     [ProvideToolWindow(typeof(ToolWindow), Transient = true)]
     public sealed class GitHubCommandPackage : Package, IOleCommandTarget
     {
-        /// <summary>
-        /// GitHubCommandPackage GUID string.
-        /// </summary>
-        public const string PackageGuidString = "39d56d2d-30ad-4a94-b950-9a4cd34c2b2b";
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GitHubCommand"/> class.
         /// </summary>
