@@ -19,7 +19,6 @@ namespace GitHub.VisualStudio.Contrib.ToolWindow
         {
             HelloCommand = new DelegateCommand(p  =>
             {
-                System.Diagnostics.Trace.WriteLine("hmmmmmmmmmmmmmmmmmmmm");
                 Text = "Hello, World!";
             });
         }
