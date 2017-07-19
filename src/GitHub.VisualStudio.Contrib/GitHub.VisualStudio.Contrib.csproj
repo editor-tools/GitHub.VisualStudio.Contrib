@@ -238,7 +238,6 @@
     <Compile Include="CommandIDAttribute.cs" />
     <Compile Include="Console\CmdLineToArgvW.cs" />
     <Compile Include="Console\MefSubcommands.cs" />
-    <Compile Include="GitCloneCommandLine.cs" />
     <Compile Include="AssemblyResolver.cs" />
     <Compile Include="Console\AssemblyResolverSubcommands.cs" />
     <Compile Include="Console\SubcommandMetadataAttribute.cs" />

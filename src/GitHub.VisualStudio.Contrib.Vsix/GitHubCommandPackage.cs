@@ -42,7 +42,6 @@ namespace GitHub.VisualStudio.Contrib.Vsix
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(GitHubCommandPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    [ProvideAppCommandLine("GitClone", typeof(GitHubCommandPackage), Arguments = "1", DemandLoad = 1)]
     [ProvideToolWindow(typeof(ToolWindow), Transient = true)]
     public sealed class GitHubCommandPackage : Package, IOleCommandTarget
     {
