@@ -8,7 +8,7 @@
     using Microsoft.VisualStudio.Shell.Interop;
     using GitHub.VisualStudio.Contrib.Vsix;
 
-    [CommandID(PackageGuids.guidGitHubCommandPackageCmdSetString, PackageIds.cmdidToolWindowCommand)]
+    [Command(PackageGuids.guidGitHubCommandPackageCmdSetString, PackageIds.cmdidToolWindowCommand)]
     internal sealed class ToolWindowCommand : CommandBase
     {
         readonly Package package;

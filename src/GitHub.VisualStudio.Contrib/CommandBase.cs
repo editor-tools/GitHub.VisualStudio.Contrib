@@ -5,14 +5,13 @@ using Microsoft.VisualStudio.Shell;
 
 namespace GitHub.VisualStudio.Contrib
 {
-    [InheritedExport]
     internal abstract class CommandBase : IDisposable
     {
         OleMenuCommandService commandService;
 
         internal CommandBase(Package package)
         {
-            var commandID = CommandIDAttribute.GetCommandID(GetType());
+            var commandID = CommandAttribute.GetCommandID(GetType());
             Command = new OleMenuCommand(MenuItemCallback, commandID);
             var serviceProvider = (IServiceProvider)package;
             commandService = (OleMenuCommandService)serviceProvider.GetService(typeof(IMenuCommandService));

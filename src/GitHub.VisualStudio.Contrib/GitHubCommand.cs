@@ -6,7 +6,7 @@ using GitHub.VisualStudio.Contrib.Vsix;
 
 namespace GitHub.VisualStudio.Contrib
 {
-    [CommandID(PackageGuids.guidGitHubCommandPackageCmdSetString, PackageIds.GitHubCommandId)]
+    [Command(PackageGuids.guidGitHubCommandPackageCmdSetString, PackageIds.GitHubCommandId)]
     internal sealed class GitHubCommand : CommandBase
     {
         IStatusBarNotificationService notificationService;

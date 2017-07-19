@@ -6,9 +6,9 @@ using System.ComponentModel.Composition;
 namespace GitHub.VisualStudio.Contrib
 {
     [MetadataAttribute]
-    internal class CommandIDAttribute : Attribute
+    internal class CommandAttribute : ExportAttribute
     {
-        public CommandIDAttribute(string menuGroup, int commandId)
+        public CommandAttribute(string menuGroup, int commandId) : base(typeof(CommandBase))
         {
             MenuGroup = menuGroup;
             CommandID = commandId;
@@ -24,11 +24,11 @@ namespace GitHub.VisualStudio.Contrib
 
         public static CommandID GetCommandID(Type type)
         {
-            var attributes = type.GetCustomAttributes(typeof(CommandIDAttribute), false);
-            var attribute = (CommandIDAttribute)attributes.FirstOrDefault();
+            var attributes = type.GetCustomAttributes(typeof(CommandAttribute), false);
+            var attribute = (CommandAttribute)attributes.FirstOrDefault();
             if(attribute == null)
             {
-                throw new ArgumentException($"Type '{type}' doesn't have a '{typeof(CommandIDAttribute)}' attribute");
+                throw new ArgumentException($"Type '{type}' doesn't have a '{typeof(CommandAttribute)}' attribute");
             }
 
             return attribute.GetCommandID();

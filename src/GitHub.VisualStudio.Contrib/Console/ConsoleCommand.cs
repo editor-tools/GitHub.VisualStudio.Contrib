@@ -7,7 +7,7 @@ using GitHub.VisualStudio.Contrib.Vsix;
 
 namespace GitHub.VisualStudio.Contrib.Console
 {
-    [CommandID(PackageGuids.guidGitHubCommandPackageCmdSetString, PackageIds.GitHubConsoleCommandId)]
+    [Command(PackageGuids.guidGitHubCommandPackageCmdSetString, PackageIds.GitHubConsoleCommandId)]
     internal sealed class ConsoleCommand : AllowParamsCommandBase
     {
         IConsoleContext consoleContext;
