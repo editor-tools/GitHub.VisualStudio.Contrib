@@ -251,6 +251,9 @@
     <Compile Include="PackageLifecycle.cs" />
     <Compile Include="AllowParamsCommandBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ApplicationResources.xaml.cs">
+      <DependentUpon>ApplicationResources.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ToolWindow\ToolWindowCommand.cs" />
     <Compile Include="ToolWindow\ToolWindowViewModel.cs" />
     <Compile Include="ToolWindow\ToolWindowView.xaml.cs">
@@ -275,6 +278,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
+    </Page>
+    <Page Include="ApplicationResources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="ToolWindow\ToolWindowView.xaml">
       <SubType>Designer</SubType>
