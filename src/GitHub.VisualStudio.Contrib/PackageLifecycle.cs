@@ -73,18 +73,7 @@ namespace GitHub.VisualStudio.Contrib
             container = new CompositionContainer(catalog, componentModel.DefaultExportProvider);
             container.ComposeExportedValue(assemblyResolver);
             container.ComposeExportedValue(package);
-
             container.GetExportedValues<CommandBase>();
-
-            var applicationResources = container.GetExportedValue<ApplicationResources>();
-            AddOrReplaceMergedDictionary(Application.Current.Resources, applicationResources);
-        }
-
-        static void AddOrReplaceMergedDictionary(ResourceDictionary parent, ResourceDictionary dictionary)
-        {
-            var mergedDictionaries = parent.MergedDictionaries;
-            mergedDictionaries.Where(d => d.GetType().FullName == dictionary.GetType().FullName).ForEach(d => d.Remove(d));
-            mergedDictionaries.Add(dictionary);
         }
 
         TypeCatalog GetCatalog(Assembly assembly)

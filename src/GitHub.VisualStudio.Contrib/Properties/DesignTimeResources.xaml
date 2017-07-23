@@ -7,6 +7,6 @@
     <SolidColorBrush x:Key="VsBrush.WindowText" Color="#FFF1F1F1" />
 
     <ResourceDictionary.MergedDictionaries>
-        <local:ApplicationResources />
+        <ResourceDictionary Source="ApplicationResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
