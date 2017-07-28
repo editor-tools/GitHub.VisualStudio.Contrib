@@ -197,6 +197,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core">
       <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\System.Reactive.Core.dll</HintPath>
       <Private>False</Private>
@@ -257,6 +258,8 @@
       <DependentUpon>ToolWindowView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Helpers\LoadingResourceDictionary.cs" />
+    <Compile Include="UI\Helpers\ApplicationResourceDictionary.cs" />
+    <Compile Include="UI\Helpers\ThemeDictionaryManager.cs" />
     <Compile Include="UI\Views\HelloWorldView.xaml.cs">
       <DependentUpon>HelloWorldView.xaml</DependentUpon>
     </Compile>
@@ -272,15 +275,47 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
+    <Resource Include="Properties\DesignTimeResources.xaml" Condition="'$(DesignTime)'=='true' OR ('$(SolutionPath)'!='' AND Exists('$(SolutionPath)') AND '$(BuildingInsideVisualStudio)'!='true' AND '$(BuildingInsideExpressionBlend)'!='true')">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
       <ContainsDesignTimeResources>true</ContainsDesignTimeResources>
-    </Page>
-    <Resource Include="Properties\ApplicationResources.xaml">
+    </Resource>
+    <Resource Include="Properties\ApplicationResources.Dark.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Resource>
+    <Resource Include="Properties\ApplicationResources.Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Resource Include="Properties\ApplicationResources.Blue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
+    <Page Include="Properties\VsBrushes.Blue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Properties\VsColors.Blue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Properties\VsColors.Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Properties\VsColors.Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Properties\VsBrushes.Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Properties\VsBrushes.Light.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ToolWindow\ToolWindowView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

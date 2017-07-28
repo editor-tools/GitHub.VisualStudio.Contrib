@@ -4,23 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:helpers="clr-namespace:GitHub.UI.Helpers"
+             Background="{DynamicResource VsBrush.Window}"
+             Foreground="{DynamicResource VsBrush.WindowText}"
              mc:Ignorable="d"
-            Background="{DynamicResource VsBrush.Window}"
-            Foreground="{DynamicResource VsBrush.WindowText}"
-            d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300">
 
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <helpers:SharedDictionaryManager Source="pack://application:,,,/GitHub.VisualStudio.Contrib;component/Properties/ApplicationResources.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
+        <helpers:ApplicationResourceDictionary ApplicationResources="/GitHub.VisualStudio.Contrib;component/Properties/ApplicationResources.xaml" />
     </UserControl.Resources>
 
     <Grid>
         <StackPanel Orientation="Vertical">
-            <Button Content="Press me!" Command="{Binding HelloCommand}" Width="120" Height="80" Name="button1"/>
-            <TextBlock Margin="10" HorizontalAlignment="Center" Text="{Binding Text}" Foreground="{DynamicResource HelloTextColor}" />
+            <Button Content="Press me!" Command="{Binding HelloCommand}" Width="120" Height="80" />
+            <TextBlock Margin="10" HorizontalAlignment="Center" Text="{Binding Text}" Foreground="{DynamicResource HelloText}" />
         </StackPanel>
     </Grid>
 </UserControl>
