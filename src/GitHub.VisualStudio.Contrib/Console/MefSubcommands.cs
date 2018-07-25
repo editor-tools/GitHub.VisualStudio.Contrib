@@ -34,7 +34,7 @@ namespace GitHub.VisualStudio.Contrib.Console
         public void MefErrors(string[] args)
         {
             var errFile = Path.Combine(ComponentModelCacheDirectory, "Microsoft.VisualStudio.Default.err");
-            if(!File.Exists(errFile))
+            if (!File.Exists(errFile))
             {
                 consoleContext.WriteLine($"Couldn't find MEF error file at '{errFile}'.");
                 return;
@@ -67,7 +67,7 @@ namespace GitHub.VisualStudio.Contrib.Console
                 }
             }
 
-            foreach(var assemblyLocation in assemblyLocations)
+            foreach (var assemblyLocation in assemblyLocations)
             {
                 consoleContext.WriteLine(assemblyLocation);
             }
@@ -141,7 +141,7 @@ namespace GitHub.VisualStudio.Contrib.Console
         static string ToMemberPath(RuntimeComposition.RuntimeExport export)
         {
             var declaringType = export.DeclaringTypeRef.Resolve();
-            var memberInfo = export.MemberRef.Resolve();
+            var memberInfo = export.MemberRef.MemberInfo;
             var path = declaringType.FullName;
             if (memberInfo != null)
             {
@@ -155,7 +155,7 @@ namespace GitHub.VisualStudio.Contrib.Console
         public void MefAssemblies(string[] args)
         {
             var asms = GetComponentAssemblies();
-            if(args.Length == 1)
+            if (args.Length == 1)
             {
                 var filter = args[0];
                 asms = asms.Where(a => a.Contains(filter)).ToArray();
@@ -178,7 +178,7 @@ namespace GitHub.VisualStudio.Contrib.Console
             }
 
             var count = asms.Count();
-            foreach(var asm in asms)
+            foreach (var asm in asms)
             {
                 try
                 {
@@ -219,7 +219,7 @@ namespace GitHub.VisualStudio.Contrib.Console
             }
         }
 
-        IEnumerable <string> GetComponentAssemblies()
+        IEnumerable<string> GetComponentAssemblies()
         {
             var assemblyFiles = new string[0];
             uint num;
