@@ -206,7 +206,7 @@
       <Version>8.0.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Composition">
-      <Version>15.8.98</Version>
+      <Version>15.6.36</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Shell.15.0">
       <Version>15.7.27703</Version>
