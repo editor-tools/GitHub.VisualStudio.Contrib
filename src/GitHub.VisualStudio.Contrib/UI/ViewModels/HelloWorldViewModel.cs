@@ -8,7 +8,7 @@ using GitHub.VisualStudio.Contrib.Console;
 namespace GitHub.VisualStudio.Contrib.UI.ViewModels
 {
     [Export, PartCreationPolicy(CreationPolicy.NonShared)]
-    public class HelloWorldViewModel : BaseViewModel, IHelloWorldViewModel
+    public class HelloWorldViewModel : ViewModelBase, IHelloWorldViewModel
     {
         IConsoleContext console;
 

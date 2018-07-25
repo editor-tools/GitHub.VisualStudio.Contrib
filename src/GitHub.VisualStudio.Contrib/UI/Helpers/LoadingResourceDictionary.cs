@@ -4,6 +4,7 @@ using System.Windows;
 using System.Reflection;
 using System.Collections.Generic;
 using GitHub.VisualStudio;
+using System.Diagnostics;
 
 namespace GitHub
 {
@@ -28,7 +29,7 @@ namespace GitHub
                 var assemblyName = FindAssemblyNameFromPackUri(value);
                 if (assemblyName == null)
                 {
-                    VsOutputLogger.WriteLine($"Couldn't find assembly name in '{value}'.");
+                    Trace.WriteLine($"Couldn't find assembly name in '{value}'.");
                     return;
                 }
 
@@ -41,7 +42,7 @@ namespace GitHub
 
                 if (!File.Exists(assemblyFile))
                 {
-                    VsOutputLogger.WriteLine($"Couldn't find assembly at '{assemblyFile}'.");
+                    Trace.WriteLine($"Couldn't find assembly at '{assemblyFile}'.");
                     return;
                 }
 
@@ -50,7 +51,7 @@ namespace GitHub
             }
             catch (Exception e)
             {
-                VsOutputLogger.WriteLine($"Error loading assembly for '{value}': {e}");
+                Trace.WriteLine($"Error loading assembly for '{value}': {e}");
             }
         }
 

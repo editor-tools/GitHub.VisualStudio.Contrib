@@ -5,6 +5,7 @@ using GitHub.Services;
 
 namespace GitHub.VisualStudio.Contrib.Console
 {
+    [Export]
     public class VSGitServicesSubcommands
     {
         IConsoleContext consoleContext;

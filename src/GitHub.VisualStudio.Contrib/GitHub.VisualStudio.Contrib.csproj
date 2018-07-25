@@ -49,48 +49,25 @@
     <Reference Include="EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
-    <Reference Include="GitHub.App">
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.App.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GitHub.Exports">
+    <Reference Include="GitHub.Exports, Version=2.5.4.0, Culture=neutral, PublicKeyToken=bc1bd09f2901c82e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Exports.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.5.4.0\GitHub.Exports.dll</HintPath>
     </Reference>
-    <Reference Include="GitHub.Exports.Reactive">
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Exports.Reactive.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GitHub.Extensions">
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Extensions.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GitHub.Extensions.Reactive">
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.Extensions.Reactive.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GitHub.UI">
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GitHub.UI.Reactive">
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.UI.Reactive.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="GitHub.VisualStudio">
+    <Reference Include="GitHub.Exports.Reactive, Version=2.5.4.0, Culture=neutral, PublicKeyToken=bc1bd09f2901c82e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.VisualStudio.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.5.4.0\GitHub.Exports.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="GitHub.VisualStudio.UI">
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\GitHub.VisualStudio.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="LibGit2Sharp">
+    <Reference Include="GitHub.UI, Version=2.5.4.0, Culture=neutral, PublicKeyToken=bc1bd09f2901c82e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\lib\GitHub.VisualStudio\2.2.0.8\LibGit2Sharp.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.5.4.0\GitHub.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="GitHub.UI.Reactive, Version=2.5.4.0, Culture=neutral, PublicKeyToken=bc1bd09f2901c82e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.5.4.0\GitHub.UI.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="GitHub.VisualStudio.UI, Version=2.5.4.0, Culture=neutral, PublicKeyToken=bc1bd09f2901c82e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.5.4.0\GitHub.VisualStudio.UI.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ComponentModel.Composition.Diagnostics, Version=0.4.3555.17520, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -247,7 +224,8 @@
     <Compile Include="Console\ISubcommandMetadata.cs" />
     <Compile Include="Console\IConsoleContext.cs" />
     <Compile Include="Console\VSGitServicesSubcommands.cs" />
-    <Compile Include="Console\WindowManagerSubcommands.cs" />
+    <Compile Include="Console\GitHubPaneService.cs" />
+    <Compile Include="Console\ViewViewModelFactorySubcommands.cs" />
     <Compile Include="GitHubCommand.cs" />
     <Compile Include="PackageLifecycle.cs" />
     <Compile Include="AllowParamsCommandBase.cs" />
