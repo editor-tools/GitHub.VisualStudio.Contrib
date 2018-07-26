@@ -28,12 +28,5 @@ namespace GitHub.VisualStudio.Contrib.Console
             view.DataContext = viewModel;
             gitHubPaneService.View = view;
         }
-
-        [STAThread]
-        [Export, SubcommandMetadata("HelloWorldView")]
-        public void HelloWorldView()
-        {
-            gitHubPaneService.View = new TextBlock { Text = "Hello, World!" };
-        }
     }
 }

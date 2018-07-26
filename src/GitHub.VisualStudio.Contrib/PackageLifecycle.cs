@@ -30,7 +30,7 @@ namespace GitHub.VisualStudio.Contrib
             try
             {
                 var gitHubPackage = FindPackage(GitHubPackagePkgString);
-                if(gitHubPackage == null)
+                if (gitHubPackage == null)
                 {
                     var message = InstallMessage;
                     dte.StatusBar.Text = message;
@@ -73,6 +73,7 @@ namespace GitHub.VisualStudio.Contrib
             container = new CompositionContainer(catalog, componentModel.DefaultExportProvider);
             container.ComposeExportedValue(assemblyResolver);
             container.ComposeExportedValue(package);
+            container.ComposeExportedValue<ICompositionService>(container);
             container.GetExportedValues<CommandBase>();
         }
 
