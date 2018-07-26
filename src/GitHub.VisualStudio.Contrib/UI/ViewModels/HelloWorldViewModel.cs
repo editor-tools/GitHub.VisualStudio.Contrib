@@ -19,9 +19,15 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
             this.console = console;
             SayHello = ReactiveCommand.Create();
             SayHello.Subscribe(_ => OnSayHello());
+
+            Done = ReactiveCommand.Create();
         }
 
         public IReactiveCommand<object> SayHello { get; }
+
+        public string Title => "Dialog Title";
+
+        public IObservable<object> Done { get; }
 
         void OnSayHello()
         {

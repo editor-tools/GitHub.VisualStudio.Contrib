@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Composition;
 using GitHub.UI;
+using GitHub.Exports;
 using GitHub.VisualStudio.Contrib.UI.ViewModels;
 using ReactiveUI;
 
@@ -9,7 +10,8 @@ namespace GitHub.VisualStudio.Contrib.UI.Views
     {
     }
 
-    [Export, PartCreationPolicy(CreationPolicy.NonShared)]
+    [ExportViewFor(typeof(IHelloWorldViewModel))]
+    [PartCreationPolicy(CreationPolicy.NonShared)]
     public partial class HelloWorldView : GenericHelloWorldView
     {
         public HelloWorldView()
