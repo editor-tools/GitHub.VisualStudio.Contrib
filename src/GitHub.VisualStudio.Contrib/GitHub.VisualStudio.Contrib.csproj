@@ -37,6 +37,9 @@
     <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GitHub.App">
+      <HintPath>..\..\lib\GitHub.VisualStudio\2.5.4.0\GitHub.App.dll</HintPath>
+    </Reference>
     <Reference Include="GitHub.Exports, Version=2.5.4.0, Culture=neutral, PublicKeyToken=bc1bd09f2901c82e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\GitHub.VisualStudio\2.5.4.0\GitHub.Exports.dll</HintPath>

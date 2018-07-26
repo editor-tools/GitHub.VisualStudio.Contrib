@@ -2,14 +2,16 @@
 using System.Reactive.Linq;
 using System.ComponentModel.Composition;
 using ReactiveUI;
-using GitHub.ViewModels;
 using GitHub.VisualStudio.Contrib.Console;
+using System.Reactive;
+using System.Threading.Tasks;
+using GitHub.ViewModels.GitHubPane;
 
 namespace GitHub.VisualStudio.Contrib.UI.ViewModels
 {
     [Export(typeof(IHelloWorldViewModel))]
     [PartCreationPolicy(CreationPolicy.NonShared)]
-    public class HelloWorldViewModel : ViewModelBase, IHelloWorldViewModel
+    public class HelloWorldViewModel : PanePageViewModelBase, IHelloWorldViewModel
     {
         IConsoleContext console;
 
@@ -24,8 +26,6 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
         }
 
         public IReactiveCommand<object> SayHello { get; }
-
-        public string Title => "Dialog Title";
 
         public IObservable<object> Done { get; }
 

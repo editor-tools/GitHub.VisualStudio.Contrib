@@ -2,7 +2,8 @@
 using System.ComponentModel.Composition;
 using GitHub.Services;
 using GitHub.Factories;
-using GitHub.VisualStudio.Contrib.UI.Views;
+using GitHub.ViewModels;
+using GitHub.ViewModels.GitHubPane;
 using GitHub.VisualStudio.Contrib.UI.ViewModels;
 using Microsoft.VisualStudio.Threading;
 
@@ -14,32 +15,23 @@ namespace GitHub.VisualStudio.Contrib.Console
         readonly ICompositionService compositionService;
         readonly IViewViewModelFactory factory;
         readonly IShowDialogService showDialog;
-        readonly GitHubPaneService gitHubPaneService;
         readonly IConsoleContext console;
+        readonly IGitHubToolWindowManager toolWindowManager;
 
         [ImportingConstructor]
         public ModelViewsSubcommands(
             ICompositionService compositionService,
             IViewViewModelFactory factory,
             IShowDialogService showDialog,
-            GitHubPaneService gitHubPaneService,
-            IConsoleContext console)
+            IConsoleContext console,
+            IGitHubServiceProvider sp)
         {
             this.compositionService = compositionService;
             this.factory = factory;
             this.showDialog = showDialog;
-            this.gitHubPaneService = gitHubPaneService;
             this.console = console;
-        }
 
-        [STAThread]
-        [Export, SubcommandMetadata("HelloWorldView")]
-        public void HelloWorldView()
-        {
-            var helloWorldView = GetExportedValue<HelloWorldView>();
-            var helloWorldViewModel = GetExportedValue<IHelloWorldViewModel>();
-            helloWorldView.DataContext = helloWorldViewModel;
-            gitHubPaneService.View = helloWorldView;
+            toolWindowManager = sp.GetService<IGitHubToolWindowManager>();
         }
 
         [STAThread]
@@ -49,6 +41,29 @@ namespace GitHub.VisualStudio.Contrib.Console
             var viewModel = GetExportedValue<IHelloWorldViewModel>();
             compositionService.SatisfyImportsOnce(factory);
             showDialog.Show(viewModel).Forget();
+        }
+
+        [STAThread]
+        [Export, SubcommandMetadata("HelloWorldViewNavigation")]
+        public async void HelloWorldViewNavigation()
+        {
+            try
+            {
+                var pane = await toolWindowManager.ShowGitHubPane();
+                await pane.ShowPullRequests();
+
+                if (pane.Content is INavigationViewModel navigationViewModel)
+                {
+                    var viewModel = GetExportedValue<IHelloWorldViewModel>();
+                    compositionService.SatisfyImportsOnce(factory);
+                    navigationViewModel.NavigateTo(viewModel);
+                }
+            }
+            catch (Exception e)
+            {
+                console.WriteLine("" + e);
+            }
+
         }
 
         T GetExportedValue<T>()
