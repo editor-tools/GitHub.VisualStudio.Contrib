@@ -142,6 +142,7 @@
     <Compile Include="UI\ViewModels\HelloWorldViewModel.cs" />
     <Compile Include="UI\Helpers\SharedDictionaryManager.cs" />
     <Compile Include="UI\ViewModels\IHelloWorldViewModel.cs" />
+    <Compile Include="UI\Views\ICompositionServiceExtensions.cs" />
     <Compile Include="UI\Views\ModelViewsSubcommands.cs" />
   </ItemGroup>
   <ItemGroup>

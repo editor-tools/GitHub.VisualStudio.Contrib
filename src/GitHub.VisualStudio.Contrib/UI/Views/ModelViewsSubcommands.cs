@@ -38,7 +38,7 @@ namespace GitHub.VisualStudio.Contrib.Console
         [Export, SubcommandMetadata("HelloWorldViewDialog")]
         public void HelloWorldViewDialog()
         {
-            var viewModel = GetExportedValue<IHelloWorldViewModel>();
+            var viewModel = compositionService.GetExportedValue<IHelloWorldViewModel>();
             compositionService.SatisfyImportsOnce(factory);
             showDialog.Show(viewModel).Forget();
         }
@@ -54,7 +54,7 @@ namespace GitHub.VisualStudio.Contrib.Console
 
                 if (pane.Content is INavigationViewModel navigationViewModel)
                 {
-                    var viewModel = GetExportedValue<IHelloWorldViewModel>();
+                    var viewModel = compositionService.GetExportedValue<IHelloWorldViewModel>();
                     compositionService.SatisfyImportsOnce(factory);
                     navigationViewModel.NavigateTo(viewModel);
                 }
@@ -63,20 +63,6 @@ namespace GitHub.VisualStudio.Contrib.Console
             {
                 console.WriteLine("" + e);
             }
-
-        }
-
-        T GetExportedValue<T>()
-        {
-            var factory = new ExportFactory<T>();
-            compositionService.SatisfyImportsOnce(factory);
-            return factory.Value;
-        }
-
-        class ExportFactory<T>
-        {
-            [Import]
-            public T Value = default(T);
         }
     }
 }
