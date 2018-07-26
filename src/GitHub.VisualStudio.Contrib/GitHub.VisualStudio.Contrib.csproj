@@ -124,8 +124,6 @@
     <Compile Include="Console\ISubcommandMetadata.cs" />
     <Compile Include="Console\IConsoleContext.cs" />
     <Compile Include="Console\VSGitServicesSubcommands.cs" />
-    <Compile Include="Console\GitHubPaneService.cs" />
-    <Compile Include="Console\ViewViewModelFactorySubcommands.cs" />
     <Compile Include="GitHubCommand.cs" />
     <Compile Include="PackageLifecycle.cs" />
     <Compile Include="AllowParamsCommandBase.cs" />
