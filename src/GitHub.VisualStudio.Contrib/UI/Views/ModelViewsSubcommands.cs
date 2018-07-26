@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.ComponentModel.Composition;
 using GitHub.Services;
 using GitHub.Factories;
@@ -45,23 +46,16 @@ namespace GitHub.VisualStudio.Contrib.Console
 
         [STAThread]
         [Export, SubcommandMetadata("HelloWorldViewNavigation")]
-        public async void HelloWorldViewNavigation()
+        public async Task HelloWorldViewNavigationAsync()
         {
-            try
-            {
-                var pane = await toolWindowManager.ShowGitHubPane();
-                await pane.ShowPullRequests();
+            var pane = await toolWindowManager.ShowGitHubPane();
+            await pane.ShowPullRequests();
 
-                if (pane.Content is INavigationViewModel navigationViewModel)
-                {
-                    var viewModel = compositionService.GetExportedValue<IHelloWorldViewModel>();
-                    compositionService.SatisfyImportsOnce(factory);
-                    navigationViewModel.NavigateTo(viewModel);
-                }
-            }
-            catch (Exception e)
+            if (pane.Content is INavigationViewModel navigationViewModel)
             {
-                console.WriteLine("" + e);
+                var viewModel = compositionService.GetExportedValue<IHelloWorldViewModel>();
+                compositionService.SatisfyImportsOnce(factory);
+                navigationViewModel.NavigateTo(viewModel);
             }
         }
     }
