@@ -14,7 +14,6 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
     {
         readonly IGitHubContextService contextService;
         readonly ITeamExplorerContext teamExplorerContext;
-        readonly IRepositoryCloneService repositoryCloneService;
 
         GitHubContext context;
         string targetUrl;
@@ -41,13 +40,15 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
                 contextService.TryOpenFile(localPath, Context);
             });
 
-            Clone = ReactiveCommand.Create();
+            Clone = ReactiveCommand.Create(this.WhenAnyValue(x =>
+                x.DefaultPath).Select(d => d is string dir && !Directory.Exists(d)));
             Clone.Subscribe(_ =>
             {
                 // await repositoryCloneService.CloneRepository(cloneUrl, repositoryDirName, targetDir);
             });
 
-            Open = ReactiveCommand.Create();
+            Open = ReactiveCommand.Create(this.WhenAnyValue(x =>
+                x.DefaultPath).Select(d => d is string dir && Directory.Exists(d)));
             Open.Subscribe(_ =>
             {
                 var dte = serviceProvider.GetService<EnvDTE.DTE>();

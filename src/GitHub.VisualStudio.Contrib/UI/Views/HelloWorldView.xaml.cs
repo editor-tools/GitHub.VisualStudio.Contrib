@@ -16,10 +16,15 @@ namespace GitHub.VisualStudio.Contrib.UI.Views
     {
         public HelloWorldView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             this.WhenActivated(d =>
             {
+                this.WhenAnyObservable(x => x.ViewModel.Clone.CanExecuteObservable)
+                    .BindTo(this, x => x.ClonePanel.Visibility);
+
+                this.WhenAnyObservable(x => x.ViewModel.Open.CanExecuteObservable)
+                    .BindTo(this, x => x.OpenPanel.Visibility);
             });
         }
     }

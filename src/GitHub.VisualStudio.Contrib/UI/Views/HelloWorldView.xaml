@@ -41,6 +41,7 @@
                 </TextBlock>
             </StackPanel>
             <StackPanel
+                x:Name="ClonePanel"
                 Margin="0,5"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
@@ -49,6 +50,7 @@
                 </TextBlock>
             </StackPanel>
             <StackPanel
+                x:Name="OpenPanel"
                 Margin="0,5"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
