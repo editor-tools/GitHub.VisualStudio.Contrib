@@ -4,6 +4,7 @@ using System.Reactive.Linq;
 using System.ComponentModel.Composition;
 using ReactiveUI;
 using GitHub.Services;
+using GitHub.Primitives;
 using GitHub.ViewModels.GitHubPane;
 
 namespace GitHub.VisualStudio.Contrib.UI.ViewModels
@@ -19,6 +20,7 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
         string targetUrl;
         string blobName;
         string defaultPath;
+        Uri repositoryUrl;
         Uri webUrl;
 
         [ImportingConstructor]
@@ -33,22 +35,32 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
 
             Title = "GitHub URL";
 
-            GoTo = ReactiveCommand.Create(this.WhenAnyValue(x => x.BlobName).Select(b => b != null));
+            // Is the target URL pointing at the active repository
+            var isActiveRepositoryObservable =
+                this.WhenAnyValue(x => x.RepositoryUrl).Select(r => r is Uri targetUrl &&
+                teamExplorerContext.ActiveRepository?.CloneUrl is UriString activeUrl &&
+                UriString.RepositoryUrlsAreEqual(activeUrl, targetUrl.ToString()));
+
+            GoTo = ReactiveCommand.Create(
+                this.WhenAnyValue(x => x.BlobName).Select(b => b != null)
+                .CombineLatest(isActiveRepositoryObservable, (a, b) => a && b));
             GoTo.Subscribe(_ =>
             {
                 var localPath = teamExplorerContext.ActiveRepository?.LocalPath;
                 contextService.TryOpenFile(localPath, Context);
             });
 
-            Clone = ReactiveCommand.Create(this.WhenAnyValue(x =>
-                x.DefaultPath).Select(d => d is string dir && !Directory.Exists(d)));
+            Clone = ReactiveCommand.Create(
+                this.WhenAnyValue(x => x.DefaultPath).Select(d => d is string dir && !Directory.Exists(d))
+                .CombineLatest(isActiveRepositoryObservable, (a, b) => a && !b));
             Clone.Subscribe(_ =>
             {
                 // await repositoryCloneService.CloneRepository(cloneUrl, repositoryDirName, targetDir);
             });
 
-            Open = ReactiveCommand.Create(this.WhenAnyValue(x =>
-                x.DefaultPath).Select(d => d is string dir && Directory.Exists(d)));
+            Open = ReactiveCommand.Create(
+                this.WhenAnyValue(x => x.DefaultPath).Select(d => d is string dir && Directory.Exists(d))
+                .CombineLatest(isActiveRepositoryObservable, (a, b) => a && !b));
             Open.Subscribe(_ =>
             {
                 var dte = serviceProvider.GetService<EnvDTE.DTE>();
@@ -68,6 +80,7 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
             this.WhenAnyValue(x => x.Context).Subscribe(c =>
             {
                 BlobName = c?.BlobName;
+                RepositoryUrl = c?.Url?.ToRepositoryUrl();
 
                 DefaultPath =
                     repositoryCloneService.DefaultClonePath is string home &&
@@ -107,6 +120,12 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
         {
             get { return webUrl; }
             private set { this.RaiseAndSetIfChanged(ref webUrl, value); }
+        }
+
+        public Uri RepositoryUrl
+        {
+            get { return repositoryUrl; }
+            private set { this.RaiseAndSetIfChanged(ref repositoryUrl, value); }
         }
 
         public IReactiveCommand<object> GoTo { get; }
