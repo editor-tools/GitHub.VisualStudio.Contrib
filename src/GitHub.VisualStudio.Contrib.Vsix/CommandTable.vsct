@@ -56,7 +56,7 @@
         <Parent guid="guidGitHubCommandPackageCmdSet" id="MyMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Invoke GitHubCommand</ButtonText>
+          <ButtonText>Open from GitHub</ButtonText>
         </Strings>
       </Button>
 
