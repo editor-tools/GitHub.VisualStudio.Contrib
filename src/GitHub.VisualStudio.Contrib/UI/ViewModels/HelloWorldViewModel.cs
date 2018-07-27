@@ -1,9 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Reactive.Linq;
 using System.ComponentModel.Composition;
 using ReactiveUI;
+using GitHub.Services;
 using GitHub.ViewModels.GitHubPane;
-using GitHub.VisualStudio.Contrib.Console;
 
 namespace GitHub.VisualStudio.Contrib.UI.ViewModels
 {
@@ -11,27 +12,108 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class HelloWorldViewModel : PanePageViewModelBase, IHelloWorldViewModel
     {
+        readonly IGitHubContextService contextService;
+        readonly ITeamExplorerContext teamExplorerContext;
+        readonly IRepositoryCloneService repositoryCloneService;
+
+        GitHubContext context;
+        string targetUrl;
+        string blobName;
+        string defaultPath;
         Uri webUrl;
 
         [ImportingConstructor]
-        public HelloWorldViewModel(IConsoleContext console)
+        public HelloWorldViewModel(
+            IGitHubContextService contextService,
+            ITeamExplorerContext teamExplorerContext,
+            IRepositoryCloneService repositoryCloneService,
+            IGitHubServiceProvider serviceProvider)
         {
-            SayHello = ReactiveCommand.Create();
-            SayHello.Subscribe(_ => console.WriteLine("Hello, World!"));
+            this.contextService = contextService;
+            this.teamExplorerContext = teamExplorerContext;
 
-            WebUrl = new Uri("https://github.com/editor-tools/GitHub.VisualStudio.Contrib");
+            Title = "GitHub URL";
+
+            GoTo = ReactiveCommand.Create();
+            GoTo.Subscribe(_ =>
+            {
+                var localPath = teamExplorerContext.ActiveRepository?.LocalPath;
+                contextService.TryOpenFile(localPath, Context);
+            });
+
+            Clone = ReactiveCommand.Create();
+            Clone.Subscribe(_ =>
+            {
+                // await repositoryCloneService.CloneRepository(cloneUrl, repositoryDirName, targetDir);
+            });
+
+            Open = ReactiveCommand.Create();
+            Open.Subscribe(_ =>
+            {
+                var dte = serviceProvider.GetService<EnvDTE.DTE>();
+                dte.ExecuteCommand("File.OpenFolder", DefaultPath);
+                dte.ExecuteCommand("View.TfsTeamExplorer");
+                contextService.TryOpenFile(DefaultPath, Context);
+            });
+
+            Context = contextService.FindContextFromClipboard();
+            TargetUrl = Context?.Url;
+
+            this.WhenAnyValue(x => x.TargetUrl).Subscribe(u =>
+            {
+                Context = contextService.FindContextFromUrl(u);
+            });
+
+            this.WhenAnyValue(x => x.Context).Subscribe(c =>
+            {
+                BlobName = c?.BlobName;
+
+                DefaultPath =
+                    repositoryCloneService.DefaultClonePath is string home &&
+                    context?.Owner is string owner &&
+                    context?.RepositoryName is string repositoryName ?
+                    Path.Combine(home, owner, repositoryName) : null;
+            });
 
             Done = ReactiveCommand.Create();
         }
 
-        public IReactiveCommand<object> SayHello { get; }
+        public string TargetUrl
+        {
+            get { return targetUrl; }
+            set { this.RaiseAndSetIfChanged(ref targetUrl, value); }
+        }
 
-        public IObservable<object> Done { get; }
+        public GitHubContext Context
+        {
+            get { return context; }
+            private set { this.RaiseAndSetIfChanged(ref context, value); }
+        }
+
+        public string BlobName
+        {
+            get { return blobName; }
+            private set { this.RaiseAndSetIfChanged(ref blobName, value); }
+        }
+
+        public string DefaultPath
+        {
+            get { return defaultPath; }
+            private set { this.RaiseAndSetIfChanged(ref defaultPath, value); }
+        }
 
         public Uri WebUrl
         {
             get { return webUrl; }
             private set { this.RaiseAndSetIfChanged(ref webUrl, value); }
         }
+
+        public IReactiveCommand<object> GoTo { get; }
+
+        public IReactiveCommand<object> Clone { get; }
+
+        public IReactiveCommand<object> Open { get; }
+
+        public IObservable<object> Done { get; }
     }
 }
