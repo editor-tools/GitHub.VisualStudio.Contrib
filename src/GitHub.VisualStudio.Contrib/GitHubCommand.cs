@@ -36,8 +36,6 @@ namespace GitHub.VisualStudio.Contrib
         async Task ShowOpenFromGitHubAsync()
         {
             var pane = await toolWindowManager.Value.ShowGitHubPane();
-            await pane.ShowPullRequests();
-
             if (pane.Content is INavigationViewModel navigationViewModel)
             {
                 var viewModel = factory.CreateViewModel<IHelloWorldViewModel>();

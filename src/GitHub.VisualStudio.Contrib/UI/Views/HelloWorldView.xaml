@@ -9,38 +9,56 @@
     xmlns:ui="clr-namespace:GitHub.UI;assembly=GitHub.UI"
     DataContext="{Binding ViewModel}"
     mc:Ignorable="d">
-    
-  <UserControl.Resources>
-    <ResourceDictionary>
-      <ResourceDictionary.MergedDictionaries>
-        <cache:SharedDictionaryManager Source="pack://application:,,,/GitHub.VisualStudio.UI;component/SharedDictionary.xaml" />
-        <cache:SharedDictionaryManager Source="pack://application:,,,/GitHub.UI;component/SharedDictionary.xaml" />
-      </ResourceDictionary.MergedDictionaries>
-    </ResourceDictionary>
-  </UserControl.Resources>
 
-  <DockPanel>
-    <StackPanel Margin="10" Orientation="Vertical">
-        <ui:OcticonImage Icon="mark_github"
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <cache:SharedDictionaryManager Source="pack://application:,,,/GitHub.VisualStudio.UI;component/SharedDictionary.xaml" />
+                <cache:SharedDictionaryManager Source="pack://application:,,,/GitHub.UI;component/SharedDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <DockPanel>
+        <StackPanel Margin="10" Orientation="Vertical">
+            <ui:OcticonImage Icon="mark_github"
             Foreground="{DynamicResource GitHubVsWindowText}"
             Margin="0,5"
             Width="48"
             Height="48" />
-        <Label
+            <Label
             Foreground="{DynamicResource GitHubVsWindowText}"
             HorizontalAlignment="Center"
             FontSize="16"
-            Content="Look an Octocat!" />
-        <StackPanel
-            Margin="0,5"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <TextBlock
-                Margin="10,0"
-                HorizontalAlignment="Center">
-                <Hyperlink Command="{Binding SayHello}"><TextBlock Text="Say, Hello" /></Hyperlink>
-            </TextBlock>
+            Content="Open from GitHub" />
+            <TextBox Text="{Binding TargetUrl, UpdateSourceTrigger=PropertyChanged}" />
+            <StackPanel
+                x:Name="GoToPanel"
+                Margin="0,5"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock Margin="10,0" HorizontalAlignment="Center">
+                    <Hyperlink Command="{Binding GoTo}">Go To</Hyperlink> <TextBlock Text="{Binding BlobName}" />
+                </TextBlock>
+            </StackPanel>
+            <StackPanel
+                x:Name="ClonePanel"
+                Margin="0,5"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock Margin="10,0" HorizontalAlignment="Center">
+                    <Hyperlink Command="{Binding Clone}">Clone</Hyperlink> <TextBlock Text="{Binding DefaultPath}" />
+                </TextBlock>
+            </StackPanel>
+            <StackPanel
+                x:Name="OpenPanel"
+                Margin="0,5"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock Margin="10,0" HorizontalAlignment="Center">
+                    <Hyperlink Command="{Binding Open}">Open</Hyperlink> <TextBlock Text="{Binding DefaultPath}" />
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
-    </StackPanel>
-  </DockPanel>
+    </DockPanel>
 </local:GenericHelloWorldView>
