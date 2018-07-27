@@ -33,7 +33,7 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
 
             Title = "GitHub URL";
 
-            GoTo = ReactiveCommand.Create();
+            GoTo = ReactiveCommand.Create(this.WhenAnyValue(x => x.BlobName).Select(b => b != null));
             GoTo.Subscribe(_ =>
             {
                 var localPath = teamExplorerContext.ActiveRepository?.LocalPath;

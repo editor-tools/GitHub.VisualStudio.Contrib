@@ -20,6 +20,9 @@ namespace GitHub.VisualStudio.Contrib.UI.Views
 
             this.WhenActivated(d =>
             {
+                this.WhenAnyObservable(x => x.ViewModel.GoTo.CanExecuteObservable)
+                    .BindTo(this, x => x.GoToPanel.Visibility);
+
                 this.WhenAnyObservable(x => x.ViewModel.Clone.CanExecuteObservable)
                     .BindTo(this, x => x.ClonePanel.Visibility);
 

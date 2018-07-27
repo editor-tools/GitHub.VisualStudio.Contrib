@@ -33,6 +33,7 @@
             Content="Open from GitHub" />
             <TextBox Text="{Binding TargetUrl, UpdateSourceTrigger=PropertyChanged}" />
             <StackPanel
+                x:Name="GoToPanel"
                 Margin="0,5"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
