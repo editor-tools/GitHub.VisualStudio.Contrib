@@ -2,10 +2,8 @@
 using System.Reactive.Linq;
 using System.ComponentModel.Composition;
 using ReactiveUI;
-using GitHub.VisualStudio.Contrib.Console;
-using System.Reactive;
-using System.Threading.Tasks;
 using GitHub.ViewModels.GitHubPane;
+using GitHub.VisualStudio.Contrib.Console;
 
 namespace GitHub.VisualStudio.Contrib.UI.ViewModels
 {
@@ -13,14 +11,15 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
     [PartCreationPolicy(CreationPolicy.NonShared)]
     public class HelloWorldViewModel : PanePageViewModelBase, IHelloWorldViewModel
     {
-        IConsoleContext console;
+        Uri webUrl;
 
         [ImportingConstructor]
         public HelloWorldViewModel(IConsoleContext console)
         {
-            this.console = console;
             SayHello = ReactiveCommand.Create();
-            SayHello.Subscribe(_ => OnSayHello());
+            SayHello.Subscribe(_ => console.WriteLine("Hello, World!"));
+
+            WebUrl = new Uri("https://github.com/editor-tools/GitHub.VisualStudio.Contrib");
 
             Done = ReactiveCommand.Create();
         }
@@ -29,9 +28,10 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
 
         public IObservable<object> Done { get; }
 
-        void OnSayHello()
+        public Uri WebUrl
         {
-            console.WriteLine("Hello, World!");
+            get { return webUrl; }
+            private set { this.RaiseAndSetIfChanged(ref webUrl, value); }
         }
     }
 }

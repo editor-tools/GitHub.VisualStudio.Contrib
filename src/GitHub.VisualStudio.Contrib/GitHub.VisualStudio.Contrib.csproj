@@ -136,13 +136,13 @@
     <Compile Include="UI\Helpers\LoadingResourceDictionary.cs" />
     <Compile Include="UI\Helpers\ApplicationResourceDictionary.cs" />
     <Compile Include="UI\Helpers\ThemeDictionaryManager.cs" />
+    <Compile Include="UI\Services\LocalViewViewModelFactory.cs" />
     <Compile Include="UI\Views\HelloWorldView.xaml.cs">
       <DependentUpon>HelloWorldView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ViewModels\HelloWorldViewModel.cs" />
     <Compile Include="UI\Helpers\SharedDictionaryManager.cs" />
     <Compile Include="UI\ViewModels\IHelloWorldViewModel.cs" />
-    <Compile Include="UI\Views\ICompositionServiceExtensions.cs" />
     <Compile Include="UI\Views\ModelViewsSubcommands.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -214,5 +214,6 @@
       <Version>15.7.27703</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -6,55 +6,45 @@ using GitHub.Factories;
 using GitHub.ViewModels;
 using GitHub.ViewModels.GitHubPane;
 using GitHub.VisualStudio.Contrib.UI.ViewModels;
-using Microsoft.VisualStudio.Threading;
+using GitHub.VisualStudio.Contrib.UI.Services;
 
 namespace GitHub.VisualStudio.Contrib.Console
 {
     [Export]
     public partial class ModelViewsSubcommands
     {
-        readonly ICompositionService compositionService;
         readonly IViewViewModelFactory factory;
         readonly IShowDialogService showDialog;
-        readonly IConsoleContext console;
-        readonly IGitHubToolWindowManager toolWindowManager;
+        readonly Lazy<IGitHubToolWindowManager> toolWindowManager;
 
         [ImportingConstructor]
         public ModelViewsSubcommands(
-            ICompositionService compositionService,
-            IViewViewModelFactory factory,
+            [Import(typeof(LocalViewViewModelFactory))] IViewViewModelFactory factory,
             IShowDialogService showDialog,
-            IConsoleContext console,
             IGitHubServiceProvider sp)
         {
-            this.compositionService = compositionService;
             this.factory = factory;
             this.showDialog = showDialog;
-            this.console = console;
 
-            toolWindowManager = sp.GetService<IGitHubToolWindowManager>();
+            toolWindowManager = new Lazy<IGitHubToolWindowManager>(() => sp.GetService<IGitHubToolWindowManager>());
         }
 
         [STAThread]
         [Export, SubcommandMetadata("HelloWorldViewDialog")]
-        public void HelloWorldViewDialog()
+        public async Task HelloWorldViewDialogAsync()
         {
-            var viewModel = compositionService.GetExportedValue<IHelloWorldViewModel>();
-            compositionService.SatisfyImportsOnce(factory);
-            showDialog.Show(viewModel).Forget();
+            var viewModel = factory.CreateViewModel<IHelloWorldViewModel>();
+            await showDialog.Show(viewModel);
         }
 
         [STAThread]
         [Export, SubcommandMetadata("HelloWorldViewNavigation")]
         public async Task HelloWorldViewNavigationAsync()
         {
-            var pane = await toolWindowManager.ShowGitHubPane();
-            await pane.ShowPullRequests();
-
+            var pane = await toolWindowManager.Value.ShowGitHubPane();
             if (pane.Content is INavigationViewModel navigationViewModel)
             {
-                var viewModel = compositionService.GetExportedValue<IHelloWorldViewModel>();
-                compositionService.SatisfyImportsOnce(factory);
+                var viewModel = factory.CreateViewModel<IHelloWorldViewModel>();
                 navigationViewModel.NavigateTo(viewModel);
             }
         }
