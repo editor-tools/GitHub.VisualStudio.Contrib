@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.ComponentModel.Composition;
 using ReactiveUI;
 using GitHub.Services;
@@ -15,6 +16,7 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
     {
         readonly IGitHubContextService contextService;
         readonly ITeamExplorerContext teamExplorerContext;
+        readonly IRepositoryCloneService repositoryCloneService;
 
         GitHubContext context;
         string targetUrl;
@@ -32,6 +34,7 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
         {
             this.contextService = contextService;
             this.teamExplorerContext = teamExplorerContext;
+            this.repositoryCloneService = repositoryCloneService;
 
             Title = "GitHub URL";
 
@@ -50,13 +53,9 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
                 contextService.TryOpenFile(localPath, Context);
             });
 
-            Clone = ReactiveCommand.Create(
-                this.WhenAnyValue(x => x.DefaultPath).Select(d => d is string dir && !Directory.Exists(d))
-                .CombineLatest(isActiveRepositoryObservable, (a, b) => a && !b));
-            Clone.Subscribe(_ =>
-            {
-                // await repositoryCloneService.CloneRepository(cloneUrl, repositoryDirName, targetDir);
-            });
+            Clone = ReactiveCommand.CreateAsyncTask<object>(
+                (this).WhenAnyValue(x => x.DefaultPath).Select(d => d is string dir && !Directory.Exists(d))
+                .CombineLatest(isActiveRepositoryObservable, (a, b) => a && !b), DoCloneAsync);
 
             Open = ReactiveCommand.Create(
                 this.WhenAnyValue(x => x.DefaultPath).Select(d => d is string dir && Directory.Exists(d))
@@ -90,6 +89,15 @@ namespace GitHub.VisualStudio.Contrib.UI.ViewModels
             });
 
             Done = ReactiveCommand.Create();
+        }
+
+        async Task<object> DoCloneAsync(object args)
+        {
+            var repositoryName = Path.GetFileName(DefaultPath);
+            var repositoryPath = Path.GetDirectoryName(DefaultPath);
+            await repositoryCloneService.CloneRepository(RepositoryUrl.ToString(), repositoryName, repositoryPath);
+            Open.Execute(null);
+            return null;
         }
 
         public string TargetUrl
